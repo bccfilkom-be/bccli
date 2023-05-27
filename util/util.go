@@ -3,6 +3,8 @@ package util
 import (
 	"errors"
 	"os"
+	"os/exec"
+	"runtime"
 	"strings"
 )
 
@@ -24,8 +26,21 @@ func CreateFile(name string) error {
 			return err
 		}
 	} else {
-		return errors.New("File already exist")
+		return errors.New("file already exist")
 	}
 
 	return nil
+}
+
+func ExecuteCommand(command string) (string, error) {
+	var output []byte
+	var err error
+
+	if runtime.GOOS == "windows" {
+		output, err = exec.Command("cmd", "/C", command).Output()
+	} else {
+		output, err = exec.Command("bash", "-c", command).Output()
+	}
+
+	return string(output), err
 }
