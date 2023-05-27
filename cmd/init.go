@@ -10,6 +10,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/gobeam/stringy"
 )
 
 // initCmd represents the init command
@@ -23,8 +24,10 @@ var initCmd = &cobra.Command{
 			return
 		}
 
+		str := stringy.New(args[0])
+
 		//make new project directory
-		projectName := args[0]
+		projectName := str.SnakeCase().ToLower()
 		if err := os.MkdirAll(projectName, os.ModePerm); err != nil {
 			fmt.Println(err)
 			return
