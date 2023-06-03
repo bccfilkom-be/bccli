@@ -8,28 +8,28 @@ import (
 	"strings"
 )
 
-func CreateFile(name string) error {
-	_, err := os.Stat(name)
+func CreateFile(name string) (file *os.File, err error) {
+	_, err = os.Stat(name)
 
 	if os.IsNotExist(err) {
 		if strings.Contains(name, "/") {
 			path := name[:strings.LastIndex(name, "/")]
 
-			err := os.MkdirAll(path, os.ModePerm)
+			err = os.MkdirAll(path, os.ModePerm)
 			if err != nil {
-				return err
+				return nil, err
 			}
 		}
 
-		_, err = os.Create(name)
+		file, err = os.Create(name)
 		if err != nil {
-			return err
+			return nil, err
 		}
 	} else {
-		return errors.New("file already exist")
+		return nil, errors.New("file already exist")
 	}
 
-	return nil
+	return file, nil
 }
 
 func ExecuteCommand(command string) (string, error) {
