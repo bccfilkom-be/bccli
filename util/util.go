@@ -6,9 +6,10 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
+	"text/template"
 )
 
-func CreateFile(name string) error {
+func CreateFile(name string) (*os.File,error) {
 	_, err := os.Stat(name)
 
 	if os.IsNotExist(err) {
@@ -17,19 +18,19 @@ func CreateFile(name string) error {
 
 			err := os.MkdirAll(path, os.ModePerm)
 			if err != nil {
-				return err
+				return nil,err
 			}
 		}
 
-		_, err = os.Create(name)
+		file, err := os.Create(name)
 		if err != nil {
-			return err
+			return nil,err
 		}
+		return file,nil
 	} else {
-		return errors.New("file already exist")
+		return nil,errors.New("file already exist")
 	}
 
-	return nil
 }
 
 func ExecuteCommand(command string) (string, error) {
@@ -43,4 +44,16 @@ func ExecuteCommand(command string) (string, error) {
 	}
 
 	return string(output), err
+}
+
+func ExecuteTemplate(data interface{}, templateFile string, templatePath string, file *os.File)(error){
+	tmplHandler, err := template.New(templateFile).ParseFiles(templatePath)
+	if err != nil {
+		return err
+	}
+	err = tmplHandler.Execute(file, data)
+	if err != nil {
+		return err
+	}
+	return nil
 }
