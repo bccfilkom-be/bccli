@@ -12,8 +12,8 @@ func CreateFile(name string) (file *os.File, err error) {
 	_, err = os.Stat(name)
 
 	if os.IsNotExist(err) {
-		if strings.Contains(name, "/") {
-			path := name[:strings.LastIndex(name, "/")]
+		if strings.ContainsAny(name, "/\\") {
+			path := name[:strings.LastIndexAny(name, "/\\")]
 
 			err = os.MkdirAll(path, os.ModePerm)
 			if err != nil {
