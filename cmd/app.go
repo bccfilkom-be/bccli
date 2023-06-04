@@ -10,6 +10,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/gobeam/stringy"
 	"github.com/spf13/cobra"
 )
 
@@ -31,7 +32,7 @@ var appCmd = &cobra.Command{
 
 	RunE: func(cmd *cobra.Command, args []string) error {
 		// Create and Change current working directory to the new app
-		appName := args[0]
+		appName := stringy.New(args[0]).SnakeCase().ToLower()
 		if err := os.MkdirAll("app/"+appName, os.ModePerm); err != nil {
 			return err
 		}
@@ -88,12 +89,12 @@ func init() {
 // Generate a Component along with its folder. This also include file and test file
 func generateComponent(appName string, componentName string) error {
 	pathStr := path.Join(componentName, fmt.Sprintf("%s_%s.go", appName, componentName))
-	if err := createAndWriteFile(pathStr); err != nil {
+	if err := createAndWriteFile(pathStr, componentName); err != nil {
 		return err
 	}
 
 	pathStr = pathStr[:strings.Index(pathStr, ".go")] + "_test.go"
-	if err := createAndWriteFile(pathStr); err != nil {
+	if err := createAndWriteFile(pathStr, componentName); err != nil {
 		return err
 	}
 
@@ -107,7 +108,7 @@ func generateComponentWithMock(appName string, componentName string) error {
 	}
 
 	pathStr := path.Join(componentName, fmt.Sprintf("%s_%s_mock.go", appName, componentName))
-	if err := createAndWriteFile(pathStr); err != nil {
+	if err := createAndWriteFile(pathStr, componentName); err != nil {
 		return err
 	}
 
@@ -115,16 +116,13 @@ func generateComponentWithMock(appName string, componentName string) error {
 }
 
 // Create and Write File components that include package name inside
-func createAndWriteFile(filePath string) error {
+func createAndWriteFile(filePath string, componentName string) error {
 	fi, err := util.CreateFile(filePath)
 	if err != nil {
 		return err
 	}
 
-	// Ensure correct package name
-	pkgName := strings.Replace("package "+strings.Split(filePath, "_")[1], ".go", "", 1)
-
-	_, err = fi.Write([]byte(pkgName))
+	_, err = fi.Write([]byte("package " + componentName))
 	if err != nil {
 		return err
 	}
