@@ -1,7 +1,6 @@
 package util
 
 import (
-	"errors"
 	"os"
 	"os/exec"
 	"runtime"
@@ -9,11 +8,6 @@ import (
 )
 
 func CreateFile(name string) (*os.File, error) {
-
-	if _, err := os.Stat(name); os.IsExist(err) {
-		return nil, errors.New("file already exist")
-	}
-
 	if strings.ContainsAny(name, "/\\") {
 		path := name[:strings.LastIndexAny(name, "/\\")]
 
@@ -22,7 +16,7 @@ func CreateFile(name string) (*os.File, error) {
 		}
 	}
 
-	fl, err := os.Create(name)
+	fl, err := os.OpenFile(name, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
 	if err != nil {
 		return nil, err
 	}
