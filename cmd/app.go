@@ -5,13 +5,21 @@ package cmd
 
 import (
 	"be-cli/util"
-	"errors"
 	"fmt"
 	"os"
-	"path/filepath"
+	"path"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
+
+type appOptions struct {
+	handler    bool
+	repository bool
+	usecase    bool
+}
+
+var appOpts appOptions
 
 // appCmd represents the app command
 var appCmd = &cobra.Command{
@@ -22,34 +30,49 @@ var appCmd = &cobra.Command{
 	SilenceUsage: true,
 
 	RunE: func(cmd *cobra.Command, args []string) error {
+		// Create and Change current working directory to the new app
 		appName := args[0]
+		if err := os.MkdirAll("app/"+appName, os.ModePerm); err != nil {
+			return err
+		}
 
-		if err := os.Chdir("app"); err != nil {
-			return errors.New("unable to locate app folder in the current working directory")
+		if err := os.Chdir("app/" + appName); err != nil {
+			return err
 		}
 
 		// Create and write all the required folders and .go files for the app
-		dirNames := [3]string{"handler", "repository", "usecase"}
 
-		for _, dirName := range dirNames {
-			dirNamePath := filepath.Join(appName, dirName, fmt.Sprintf("%s_%s.go", appName, dirName))
-			if err := createAndWriteFile(dirNamePath, dirName); err != nil {
+		// Generate all components if no flag are specified
+		if !appOpts.handler && !appOpts.repository && !appOpts.usecase {
+			if err := generateComponent(appName, "handler"); err != nil {
+				return err
+			}
+			if err := generateComponentWithMock(appName, "repository"); err != nil {
+				return err
+			}
+			if err := generateComponentWithMock(appName, "usecase"); err != nil {
+				return err
+			}
+			return nil
+		}
+
+		// Generate component based on specified flag
+		switch {
+		case appOpts.handler:
+			if err := generateComponent(appName, "handler"); err != nil {
 				return err
 			}
 
-			dirNamePath = filepath.Join(appName, dirName, fmt.Sprintf("%s_%s_test.go", appName, dirName))
-			if err := createAndWriteFile(dirNamePath, dirName); err != nil {
+		case appOpts.repository:
+			if err := generateComponentWithMock(appName, "repository"); err != nil {
+				return err
+			}
+
+		case appOpts.usecase:
+			if err := generateComponentWithMock(appName, "usecase"); err != nil {
 				return err
 			}
 		}
-
-		for _, dirName := range dirNames[1:] {
-			dirNamePath := filepath.Join(appName, dirName, fmt.Sprintf("%s_%s_mock.go", appName, dirName))
-			if err := createAndWriteFile(dirNamePath, dirName); err != nil {
-				return err
-			}
-		}
-
 		return nil
 	},
 }
@@ -59,6 +82,10 @@ func init() {
 	// if err := appCmd.MarkFlagRequired("name"); err != nil {
 	// 	fmt.Println(err.Error())
 	// }
+
+	appCmd.Flags().BoolVar(&appOpts.handler, "handler", false, "Generate handler component")
+	appCmd.Flags().BoolVar(&appOpts.repository, "repository", false, "Generate repository component")
+	appCmd.Flags().BoolVar(&appOpts.usecase, "usecase", false, "Generate usecase component")
 
 	// Here you will define your flags and configuration settings.
 
@@ -72,13 +99,46 @@ func init() {
 	generateCmd.AddCommand(appCmd)
 }
 
-func createAndWriteFile(filePath, packageName string) error {
+// Generate a Component along with its folder. This also include file and test file
+func generateComponent(appName string, componentName string) error {
+	pathStr := path.Join(componentName, fmt.Sprintf("%s_%s.go", appName, componentName))
+	if err := createAndWriteFile(pathStr); err != nil {
+		return err
+	}
+
+	pathStr = pathStr[:strings.Index(pathStr, ".go")] + "_test.go"
+	if err := createAndWriteFile(pathStr); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Same as generateComponent() but this include mock file
+func generateComponentWithMock(appName string, componentName string) error {
+	if err := generateComponent(appName, componentName); err != nil {
+		return err
+	}
+
+	pathStr := path.Join(componentName, fmt.Sprintf("%s_%s_mock.go", appName, componentName))
+	if err := createAndWriteFile(pathStr); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Create and Write File components that include package name inside
+func createAndWriteFile(filePath string) error {
 	fi, err := util.CreateFile(filePath)
 	if err != nil {
 		return err
 	}
 
-	_, err = fi.Write([]byte("package " + packageName))
+	// Ensure correct package name
+	pkgName := strings.Replace("package "+strings.Split(filePath, "_")[1], ".go", "", 1)
+
+	_, err = fi.Write([]byte(pkgName))
 	if err != nil {
 		return err
 	}
