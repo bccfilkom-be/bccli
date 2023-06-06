@@ -58,18 +58,17 @@ var appCmd = &cobra.Command{
 		}
 
 		// Generate component based on specified flag
-		switch {
-		case appOpts.handler:
+		if appOpts.handler {
 			if err := generateComponent(appName, "handler"); err != nil {
 				return err
 			}
-
-		case appOpts.repository:
+		}
+		if appOpts.repository {
 			if err := generateComponentWithMock(appName, "repository"); err != nil {
 				return err
 			}
-
-		case appOpts.usecase:
+		}
+		if appOpts.usecase {
 			if err := generateComponentWithMock(appName, "usecase"); err != nil {
 				return err
 			}
