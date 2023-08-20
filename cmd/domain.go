@@ -4,6 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"be-cli/template"
 	"be-cli/util"
 	"fmt"
 
@@ -32,7 +33,6 @@ to quickly create a Cobra application.`,
 		}
 
 		str := stringy.New(args[0])
-
 		domainName := str.CamelCase()
 		file, err := util.CreateFile("domain/" + domainName + ".go")
 		if err != nil {
@@ -41,10 +41,18 @@ to quickly create a Cobra application.`,
 		} else {
 			fmt.Println("successed: Make file domain/"+domainName+".go")
 		}
+
 		data := Data{
 			Domain: domainName,
 		}
-		err=util.ExecuteTemplate(data,"domain.tmpl","template/domain.tmpl",file)
+
+		fileString, err := template.GetFileString("file-template/domain.tmpl")
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		err=util.ExecuteTemplate(data,"domain.tmpl",fileString,file)
 		if err != nil {
 			fmt.Println(err)
 			return

@@ -46,8 +46,8 @@ func ExecuteCommand(command string) (string, error) {
 	return string(output), err
 }
 
-func ExecuteTemplate(data interface{}, templateFile string, templatePath string, file *os.File)(error){
-	tmplHandler, err := template.New(templateFile).ParseFiles(templatePath)
+func ExecuteTemplate(data interface{}, templateFile string, fileString string, file *os.File)(error){
+	tmplHandler, err := template.New(templateFile).Parse(fileString)
 	if err != nil {
 		return err
 	}
