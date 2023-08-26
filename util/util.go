@@ -1,35 +1,27 @@
 package util
 
 import (
-	"errors"
 	"os"
 	"os/exec"
 	"runtime"
 	"strings"
 )
 
-func CreateFile(name string) error {
-	_, err := os.Stat(name)
+func CreateFile(name string) (*os.File, error) {
+	if strings.ContainsAny(name, "/\\") {
+		path := name[:strings.LastIndexAny(name, "/\\")]
 
-	if os.IsNotExist(err) {
-		if strings.Contains(name, "/") {
-			path := name[:strings.LastIndex(name, "/")]
-
-			err := os.MkdirAll(path, os.ModePerm)
-			if err != nil {
-				return err
-			}
+		if err := os.MkdirAll(path, os.ModePerm); err != nil {
+			return nil, err
 		}
-
-		_, err = os.Create(name)
-		if err != nil {
-			return err
-		}
-	} else {
-		return errors.New("file already exist")
 	}
 
-	return nil
+	fl, err := os.OpenFile(name, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
+	if err != nil {
+		return nil, err
+	}
+
+	return fl, nil
 }
 
 func ExecuteCommand(command string) (string, error) {

@@ -1,6 +1,5 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -65,7 +64,7 @@ var initCmd = &cobra.Command{
 			fmt.Println("successed: Make directory app")
 		}
 
-		if err := util.CreateFile("cmd/main.go"); err != nil {
+		if _, err := util.CreateFile("cmd/main.go"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
@@ -100,7 +99,7 @@ var initCmd = &cobra.Command{
 			fmt.Println("successed: Make directory middleware")
 		}
 
-		if err := util.CreateFile("rest/rest.go"); err != nil {
+		if _, err := util.CreateFile("rest/rest.go"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
@@ -114,35 +113,35 @@ var initCmd = &cobra.Command{
 			fmt.Println("successed: Make directory util")
 		}
 
-		if err := util.CreateFile(".env"); err != nil {
+		if _, err := util.CreateFile(".env"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
 			fmt.Println("successed: Make file .env")
 		}
 
-		if err := util.CreateFile(".gitignore"); err != nil {
+		if _, err := util.CreateFile(".gitignore"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
 			fmt.Println("successed: Make file .gitignore")
 		}
 
-		if err := util.CreateFile("README.md"); err != nil {
+		if _, err := util.CreateFile("README.md"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
 			fmt.Println("successed: Make file README.md")
 		}
 
-		if err := util.CreateFile("Dockerfile"); err != nil {
+		if _, err := util.CreateFile("Dockerfile"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
 			fmt.Println("successed: Make file Dockerfile")
 		}
 
-		if err := util.CreateFile("docker-compose.yaml"); err != nil {
+		if _, err := util.CreateFile("docker-compose.yaml"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
