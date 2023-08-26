@@ -4,6 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"be-cli/template"
 	"be-cli/util"
 	"errors"
 	"fmt"
@@ -64,10 +65,22 @@ This project purposed for building REST API with clean architecture inspired by 
 		}
 		fmt.Printf(successCreateDirectory, "app")
 
-		if _, err := util.CreateFile("cmd/main.go"); err != nil {
+		file, err := util.CreateFile("cmd/main.go")
+		if err != nil {
 			return err
 		}
 		fmt.Printf(successCreateFile, "cmd/main.go")
+
+		//give content to main.go
+		fileString, err := template.GetFileString("file-template/main.tmpl")
+		if err != nil {
+			return err
+		}
+
+		err = util.ExecuteTemplate(nil, "main.tmpl", fileString, file)
+		if err != nil {
+			return err
+		}
 
 		if err := os.MkdirAll("domain", os.ModePerm); err != nil {
 			return err
@@ -100,7 +113,7 @@ This project purposed for building REST API with clean architecture inspired by 
 		}
 		fmt.Printf(successCreateFile, ".env")
 
-		file, err := util.CreateFile(".gitignore")
+		file, err = util.CreateFile(".gitignore")
 		if err != nil {
 			return err
 		}
