@@ -149,6 +149,17 @@ This project purposed for building REST API with clean architecture inspired by 
 		}
 		fmt.Printf(successCreateFile, "docker-compose.yaml")
 
+		//create mark file and give content
+		file, err = util.CreateFile(".mark")
+		if err != nil {
+			return err
+		}
+
+		_, err = file.Write([]byte("This project was created by be-cli. Don't delete this file if you still want to use the be-cli feature"))
+		if err != nil {
+			return err
+		}
+
 		if err := os.Chdir("../"); err != nil {
 			return err
 		}
