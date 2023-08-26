@@ -6,7 +6,6 @@ package cmd
 import (
 	"be-cli/template"
 	"be-cli/util"
-	"errors"
 	"fmt"
 	"os"
 
@@ -25,10 +24,8 @@ var initCmd = &cobra.Command{
 	Short: "generate go project for building REST API",
 	Long: `This command is used for make project with name that you specified.
 This project purposed for building REST API with clean architecture inspired by Uncle Bob`,
+	Args: cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) == 0 {
-			return errors.New("specified your project name")
-		}
 
 		str := stringy.New(args[0])
 
