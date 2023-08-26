@@ -100,8 +100,13 @@ This project purposed for building REST API with clean architecture inspired by 
 		}
 		fmt.Printf(successCreateFile, ".env")
 
-		if _, err := util.CreateFile(".gitignore"); err != nil {
-			fmt.Println(err)
+		file, err := util.CreateFile(".gitignore")
+		if err != nil {
+			return err
+		}
+
+		_, err = file.Write([]byte(".env"))
+		if err != nil {
 			return err
 		}
 		fmt.Printf(successCreateFile, ".gitignore")
