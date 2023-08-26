@@ -98,10 +98,17 @@ This project purposed for building REST API with clean architecture inspired by 
 		}
 		fmt.Printf(successCreateDirectory, "middleware")
 
-		if _, err := util.CreateFile("rest/rest.go"); err != nil {
+		file, err = util.CreateFile("rest/rest.go")
+		if err != nil {
 			return err
 		}
 		fmt.Printf(successCreateFile, "rest/rest.go")
+
+		//give content to rest.go
+		_, err = file.Write([]byte("package rest"))
+		if err != nil {
+			return err
+		}
 
 		if err := os.MkdirAll("util", os.ModePerm); err != nil {
 			return err
