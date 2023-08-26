@@ -74,11 +74,6 @@ This project purposed for building REST API with clean architecture inspired by 
 		}
 		fmt.Printf(successCreateDirectory, "domain")
 
-		if err := os.MkdirAll("deploy", os.ModePerm); err != nil {
-			return err
-		}
-		fmt.Printf(successCreateDirectory, "deploy")
-
 		if err := os.MkdirAll("infrastructure", os.ModePerm); err != nil {
 			return err
 		} else {
