@@ -1,6 +1,8 @@
 package util
 
 import (
+	"errors"
+	"html/template"
 	"os"
 	"os/exec"
 	"runtime"
@@ -8,20 +10,26 @@ import (
 )
 
 func CreateFile(name string) (*os.File, error) {
-	if strings.ContainsAny(name, "/\\") {
-		path := name[:strings.LastIndexAny(name, "/\\")]
+	_, err := os.Stat(name)
 
-		if err := os.MkdirAll(path, os.ModePerm); err != nil {
+	if os.IsNotExist(err) {
+		if strings.Contains(name, "/") {
+			path := name[:strings.LastIndex(name, "/")]
+
+			err := os.MkdirAll(path, os.ModePerm)
+			if err != nil {
+				return nil, err
+			}
+		}
+
+		file, err := os.Create(name)
+		if err != nil {
 			return nil, err
 		}
+		return file, nil
+	} else {
+		return nil, errors.New("file already exist")
 	}
-
-	fl, err := os.OpenFile(name, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
-	if err != nil {
-		return nil, err
-	}
-
-	return fl, nil
 }
 
 func ExecuteCommand(command string) (string, error) {
@@ -35,4 +43,16 @@ func ExecuteCommand(command string) (string, error) {
 	}
 
 	return string(output), err
+}
+
+func ExecuteTemplate(data interface{}, templateFile string, fileString string, file *os.File) error {
+	tmplHandler, err := template.New(templateFile).Parse(fileString)
+	if err != nil {
+		return err
+	}
+	err = tmplHandler.Execute(file, data)
+	if err != nil {
+		return err
+	}
+	return nil
 }
