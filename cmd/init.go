@@ -123,17 +123,23 @@ This project purposed for building REST API with clean architecture inspired by 
 		}
 		fmt.Printf(successCreateFile, ".env")
 
+		//create file .env.example
+		if _, err := util.CreateFile(".env.example"); err != nil {
+			return err
+		}
+		fmt.Printf(successCreateFile, ".env.example")
+
 		//create file .gitignore and give it content
 		file, err = util.CreateFile(".gitignore")
 		if err != nil {
 			return err
 		}
+		fmt.Printf(successCreateFile, ".gitignore")
 
 		_, err = file.Write([]byte(".env"))
 		if err != nil {
 			return err
 		}
-		fmt.Printf(successCreateFile, ".gitignore")
 
 		//create file README.md
 		if _, err := util.CreateFile("README.md"); err != nil {
