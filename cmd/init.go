@@ -14,9 +14,10 @@ import (
 
 // initCmd represents the init command
 var initCmd = &cobra.Command{
-	Use:   "init",
-	Short: "",
-	Long:  ``,
+	Use:   "init <project-name>",
+	Short: "generate go project for building REST API",
+	Long:  `This command is used for make project with name that you specified.
+This project purposed for building REST API with clean architecture inspired by Uncle Bob`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			fmt.Println("Specified your project name")
