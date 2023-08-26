@@ -56,19 +56,20 @@ This project purposed for building REST API with clean architecture inspired by 
 		}
 		fmt.Println("successed: Installing gin")
 
-		//bootstrapping
+		//BOOTSTRAPING
+		//create directory app
 		if err := os.MkdirAll("app", os.ModePerm); err != nil {
 			return err
 		}
 		fmt.Printf(successCreateDirectory, "app")
 
+		//create directory cmd, file cmd/main.go, give content to main.go
 		file, err := util.CreateFile("cmd/main.go")
 		if err != nil {
 			return err
 		}
 		fmt.Printf(successCreateFile, "cmd/main.go")
 
-		//give content to main.go
 		fileString, err := template.GetFileString("file-template/main.tmpl")
 		if err != nil {
 			return err
@@ -79,44 +80,50 @@ This project purposed for building REST API with clean architecture inspired by 
 			return err
 		}
 
+		//create directory domain
 		if err := os.MkdirAll("domain", os.ModePerm); err != nil {
 			return err
 		}
 		fmt.Printf(successCreateDirectory, "domain")
 
+		//create directory infra
 		if err := os.MkdirAll("infrastructure", os.ModePerm); err != nil {
 			return err
 		} else {
 			fmt.Printf(successCreateDirectory, "infrastructure")
 		}
 
+		//create directory middleware
 		if err := os.MkdirAll("middleware", os.ModePerm); err != nil {
 			return err
 		}
 		fmt.Printf(successCreateDirectory, "middleware")
 
+		//create directory rest, file rest/rest.go, give content to rest.go
 		file, err = util.CreateFile("rest/rest.go")
 		if err != nil {
 			return err
 		}
 		fmt.Printf(successCreateFile, "rest/rest.go")
 
-		//give content to rest.go
 		_, err = file.Write([]byte("package rest"))
 		if err != nil {
 			return err
 		}
 
+		//create directory util
 		if err := os.MkdirAll("util", os.ModePerm); err != nil {
 			return err
 		}
 		fmt.Println("successed: Make directory util")
 
+		//create file .env
 		if _, err := util.CreateFile(".env"); err != nil {
 			return err
 		}
 		fmt.Printf(successCreateFile, ".env")
 
+		//create file .gitignore and give it content
 		file, err = util.CreateFile(".gitignore")
 		if err != nil {
 			return err
@@ -128,18 +135,21 @@ This project purposed for building REST API with clean architecture inspired by 
 		}
 		fmt.Printf(successCreateFile, ".gitignore")
 
+		//create file README.md
 		if _, err := util.CreateFile("README.md"); err != nil {
 			fmt.Println(err)
 			return err
 		}
 		fmt.Printf(successCreateFile, "README.md")
 
+		//create file Dockerfile
 		if _, err := util.CreateFile("Dockerfile"); err != nil {
 			fmt.Println(err)
 			return err
 		}
 		fmt.Printf(successCreateFile, "Dockerfile")
 
+		//create file //docker-compose.yaml
 		if _, err := util.CreateFile("docker-compose.yaml"); err != nil {
 			fmt.Println(err)
 			return err
@@ -167,14 +177,4 @@ This project purposed for building REST API with clean architecture inspired by 
 
 func init() {
 	rootCmd.AddCommand(initCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// initCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// initCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
