@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"be-cli/util"
+	"errors"
 	"fmt"
 	"os"
 
@@ -12,16 +13,20 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const (
+	successCreateFile      string = "successed: Make file %s\n"
+	successCreateDirectory string = "successed: Make Directory %s\n"
+)
+
 // initCmd represents the init command
 var initCmd = &cobra.Command{
 	Use:   "init <project-name>",
 	Short: "generate go project for building REST API",
-	Long:  `This command is used for make project with name that you specified.
+	Long: `This command is used for make project with name that you specified.
 This project purposed for building REST API with clean architecture inspired by Uncle Bob`,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
-			fmt.Println("Specified your project name")
-			return
+			return errors.New("specified your project name")
 		}
 
 		str := stringy.New(args[0])
@@ -29,131 +34,106 @@ This project purposed for building REST API with clean architecture inspired by 
 		//make new project directory
 		projectName := str.SnakeCase().ToLower()
 		if err := os.MkdirAll(projectName, os.ModePerm); err != nil {
-			fmt.Println(err)
-			return
+			return err
 		}
 
 		//run go mod init
 		if err := os.Chdir(projectName); err != nil {
-			fmt.Println(err)
-			return
+			return err
 		}
 
 		command := "go mod init " + projectName
 		_, err := util.ExecuteCommand(command)
 		if err != nil {
-			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make go project")
+			return err
 		}
+		fmt.Println("successed: Make go project")
 
 		//gin init
+		fmt.Println("installing gin ...")
+
 		_, err = util.ExecuteCommand("go get -u github.com/gin-gonic/gin")
 		if err != nil {
-			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Installing gin")
+			return err
 		}
+		fmt.Println("successed: Installing gin")
 
 		//bootstrapping
 		if err := os.MkdirAll("app", os.ModePerm); err != nil {
-			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make directory app")
+			return err
 		}
+		fmt.Printf(successCreateDirectory, "app")
 
 		if _, err := util.CreateFile("cmd/main.go"); err != nil {
-			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make file cmd/main.go")
+			return err
 		}
+		fmt.Printf(successCreateFile, "cmd/main.go")
 
 		if err := os.MkdirAll("domain", os.ModePerm); err != nil {
-			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make directory domain")
+			return err
 		}
+		fmt.Printf(successCreateDirectory, "domain")
 
 		if err := os.MkdirAll("deploy", os.ModePerm); err != nil {
-			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make directory deploy")
+			return err
 		}
+		fmt.Printf(successCreateDirectory, "deploy")
 
 		if err := os.MkdirAll("infrastructure", os.ModePerm); err != nil {
-			fmt.Println(err)
-			return
+			return err
 		} else {
-			fmt.Println("successed: Make directory infrastructure")
+			fmt.Printf(successCreateDirectory, "infrastructure")
 		}
 
 		if err := os.MkdirAll("middleware", os.ModePerm); err != nil {
-			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make directory middleware")
+			return err
 		}
+		fmt.Printf(successCreateDirectory, "middleware")
 
 		if _, err := util.CreateFile("rest/rest.go"); err != nil {
-			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make file rest/rest.go")
+			return err
 		}
+		fmt.Printf(successCreateFile, "rest/rest.go")
 
 		if err := os.MkdirAll("util", os.ModePerm); err != nil {
-			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make directory util")
+			return err
 		}
+		fmt.Println("successed: Make directory util")
 
 		if _, err := util.CreateFile(".env"); err != nil {
-			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make file .env")
+			return err
 		}
+		fmt.Printf(successCreateFile, ".env")
 
 		if _, err := util.CreateFile(".gitignore"); err != nil {
 			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make file .gitignore")
+			return err
 		}
+		fmt.Printf(successCreateFile, ".gitignore")
 
 		if _, err := util.CreateFile("README.md"); err != nil {
 			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make file README.md")
+			return err
 		}
+		fmt.Printf(successCreateFile, "README.md")
 
 		if _, err := util.CreateFile("Dockerfile"); err != nil {
 			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make file Dockerfile")
+			return err
 		}
+		fmt.Printf(successCreateFile, "Dockerfile")
 
 		if _, err := util.CreateFile("docker-compose.yaml"); err != nil {
 			fmt.Println(err)
-			return
-		} else {
-			fmt.Println("successed: Make file docker-compose.yaml")
+			return err
 		}
+		fmt.Printf(successCreateFile, "docker-compose.yaml")
 
 		if err := os.Chdir("../"); err != nil {
-			fmt.Println(err)
-			return
+			return err
 		}
 
+		return nil
 	},
 }
 
