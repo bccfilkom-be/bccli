@@ -19,6 +19,7 @@ type Database struct {
 	Type       string
 	DataSource string
 	Package    string
+	Command    string
 }
 
 // infraCmd represents the infra command
@@ -34,34 +35,30 @@ to quickly create a Cobra application.`,
 		if database != "" {
 			var data Database
 			if database == "mysql" {
-				_, err := util.ExecuteCommand("go get github.com/go-sql-driver/mysql")
-				if err != nil {
-					fmt.Println(err)
-					return
-				} else {
-					fmt.Println("successed: Installing mysql driver")
-				}
 				data = Database{
 					Type:       database,
 					DataSource: "\"%s:%s@tcp(%s)/%s\",os.Getenv(\"DB_USER\"),os.Getenv(\"DB_PASS\"),os.Getenv(\"DB_HOST\"),os.Getenv(\"DB_NAME\"),",
 					Package:    "github.com/go-sql-driver/mysql",
+					Command:   	"go get github.com/go-sql-driver/mysql",
 				}
 			} else if database == "postgresql" {
-				_, err := util.ExecuteCommand("go get github.com/lib/pq")
-				if err != nil {
-					fmt.Println(err)
-					return
-				} else {
-					fmt.Println("successed: Installing postgresql driver")
-				}
 				data = Database{
 					Type:       database,
 					DataSource: "\"postgresql://%s:%s@%s/%s?sslmode=disable\",os.Getenv(\"DB_USER\"),os.Getenv(\"DB_PASS\"),os.Getenv(\"DB_HOST\"),os.Getenv(\"DB_NAME\"),",
 					Package:    "github.com/lib/pq",
+					Command:   	"go get github.com/lib/pq",
 				}
 			} else {
 				fmt.Println("Specified your database type. ex: mysql,postgresql")
 				return
+			}
+
+			_, err := util.ExecuteCommand(data.Command)
+			if err != nil {
+				fmt.Println(err)
+				return
+			} else {
+				fmt.Println("successed: Installing "+data.Type+" driver")
 			}
 
 			file, err := util.CreateFile("infrastructure/" + database + ".go")
@@ -85,6 +82,8 @@ to quickly create a Cobra application.`,
 			} else {
 				fmt.Println("successed: Create " + database + " database connection")
 			}
+		}else{
+			cmd.Help()
 		}
 	},
 }
@@ -93,14 +92,4 @@ func init() {
 	infraCmd.Flags().StringVarP(&database, "db", "d", "", "Flag to generate database connection")
 
 	generateCmd.AddCommand(infraCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// infraCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// infraCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
