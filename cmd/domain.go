@@ -32,7 +32,7 @@ to quickly create a Cobra application.`,
 		}
 
 		str := stringy.New(args[0])
-		domainName := str.CamelCase()
+		domainName := str.SnakeCase().ToLower()
 		file, err := util.CreateFile("domain/" + domainName + ".go")
 		if err != nil {
 			fmt.Println(err)
@@ -42,7 +42,7 @@ to quickly create a Cobra application.`,
 		}
 
 		data := Data{
-			Domain: domainName,
+			Domain: str.CamelCase(),
 		}
 
 		fileString, err := template.GetFileString("file-template/domain.tmpl")
@@ -63,14 +63,4 @@ to quickly create a Cobra application.`,
 
 func init() {
 	generateCmd.AddCommand(domainCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// domainCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// domainCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
