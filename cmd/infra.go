@@ -25,13 +25,9 @@ type Database struct {
 
 // infraCmd represents the infra command
 var infraCmd = &cobra.Command{
-	Use:   "infra",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "infra <flag> <infra-spesific-type>",
+	Short: "Generate infrastructure components for your REST API project.",
+	Long: `This command allows you to generate infrastructure components for your REST API project. You can specify the type of infrastructure you want to generate using the flag and provide the specific type of infrastructure as an argument. This command streamlines the process of creating essential infrastructure components for your REST API, such as databases, caching systems, or other dependencies. It ensures that your project has the necessary infrastructure in place to support its functionality. Customize the generated infrastructure components according to your project's specific requirements, and use the appropriate flags and arguments to tailor the generation process.`,
 	RunE: func(cmd *cobra.Command, args []string) error{
 		if database != "" {
 			var data Database
@@ -86,7 +82,7 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	infraCmd.Flags().StringVarP(&database, "db", "d", "", "Flag to generate database connection")
+	infraCmd.Flags().StringVarP(&database, "db", "d", "", "Flag to generate database connection. infra-spesific-type: mysql,postgresql")
 
 	generateCmd.AddCommand(infraCmd)
 }
