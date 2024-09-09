@@ -39,7 +39,7 @@ to quickly create a Cobra application.`,
 			fmt.Println(err)
 			return
 		} else {
-			fmt.Println("successed: Make file domain/"+domainName+".go")
+			fmt.Println("successed: Make file domain/" + domainName + ".go")
 		}
 
 		data := Data{
@@ -52,12 +52,13 @@ to quickly create a Cobra application.`,
 			return
 		}
 
-		err=util.ExecuteTemplate(data,"domain.tmpl",fileString,file)
+
+		err = util.ExecuteTemplate(data, "domain.tmpl", fileString, file)
 		if err != nil {
 			fmt.Println(err)
 			return
 		} else {
-			fmt.Println("successed: Create "+domainName+" domain")
+			fmt.Println("successed: Create " + domainName + " domain")
 		}
 	},
 }
