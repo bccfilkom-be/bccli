@@ -6,7 +6,6 @@ package cmd
 import (
 	"be-cli/template"
 	"be-cli/util"
-	"errors"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -52,38 +51,42 @@ var infraCmd = &cobra.Command{
 					Command:   	"go get github.com/lib/pq",
 				}
 			} else {
-				return errors.New("Specified your database type. ex: mysql,postgresql")
+				fmt.Println("error: please specified your database type. ex: --db=mysql")
+				return
 			}
 
 			_, err := util.ExecuteCommand(data.Command)
 			if err != nil {
-				return err
+				fmt.Println(err)
+				return
 			} else {
 				fmt.Println("successed: Installing "+data.Type+" driver")
 			}
 
 			file, err := util.CreateFile("infrastructure/" + database + ".go")
 			if err != nil {
-				return err
+				fmt.Println(err)
+				return
 			} else {
 				fmt.Println("successed: Make file infrastructure/" + database + ".go")
 			}
 
 			fileString, err := template.GetFileString("file-template/sql.tmpl")
 			if err != nil {
-				return err
+				fmt.Println(err)
+				return
 			}
 
 			err = util.ExecuteTemplate(data, "sql.tmpl", fileString, file)
 			if err != nil {
-				return err
+				fmt.Println(err)
+				return
 			} else {
 				fmt.Println("successed: Create " + database + " database connection")
 			}
 		}else{
 			cmd.Help()
 		}
-		return nil
 	},
 }
 
