@@ -23,13 +23,9 @@ type Database struct {
 
 // infraCmd represents the infra command
 var infraCmd = &cobra.Command{
-	Use:   "infra",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "infra [<name>]",
+	Short: "Generate infra [<name>] components",
+	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if database != "" {
 			var data Database
@@ -92,7 +88,7 @@ to quickly create a Cobra application.`,
 func init() {
 	infraCmd.Flags().StringVarP(&database, "db", "d", "", "Flag to generate database connection")
 
-	generateCmd.AddCommand(infraCmd)
+	rootCmd.AddCommand(infraCmd)
 
 	// Here you will define your flags and configuration settings.
 

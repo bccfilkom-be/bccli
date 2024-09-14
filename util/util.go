@@ -7,7 +7,6 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
-	"text/template"
 )
 
 func CreateFile(name string) (*os.File, error) {
