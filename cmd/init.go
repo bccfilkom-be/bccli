@@ -24,11 +24,8 @@ var initCmd = &cobra.Command{
 		}
 
 		str := stringy.New(args[0])
-
-		var projectName string
-
 		//make new project directory
-		projectName = str.SnakeCase().ToLower()
+		projectName := str.SnakeCase().ToLower()
 		if err := os.MkdirAll(projectName, os.ModePerm); err != nil {
 			fmt.Println(err)
 			return
