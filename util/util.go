@@ -2,7 +2,7 @@ package util
 
 import (
 	"errors"
-	"html/template"
+	"text/template"
 	"os"
 	"os/exec"
 	"runtime"

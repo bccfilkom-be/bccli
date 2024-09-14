@@ -6,6 +6,7 @@ package cmd
 import (
 	"be-cli/template"
 	"be-cli/util"
+	"errors"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -19,6 +20,7 @@ type Database struct {
 	Type       string
 	DataSource string
 	Package    string
+	Command    string
 }
 
 // infraCmd represents the infra command
@@ -32,68 +34,62 @@ var infraCmd = &cobra.Command{
 			fmt.Println("error: please specified your flag. ex: --db=mysql")
 			return
 		}
-
+    
 		if database != "" {
 			var data Database
 			if database == "mysql" {
-				_, err := util.ExecuteCommand("go get github.com/go-sql-driver/mysql")
-				if err != nil {
-					fmt.Println(err)
-					return
-				} else {
-					fmt.Println("successed: Installing mysql driver")
-				}
 				data = Database{
 					Type:       database,
 					DataSource: "\"%s:%s@tcp(%s)/%s\",os.Getenv(\"DB_USER\"),os.Getenv(\"DB_PASS\"),os.Getenv(\"DB_HOST\"),os.Getenv(\"DB_NAME\"),",
 					Package:    "github.com/go-sql-driver/mysql",
+					Command:   	"go get github.com/go-sql-driver/mysql",
 				}
 			} else if database == "postgresql" {
-				_, err := util.ExecuteCommand("go get github.com/lib/pq")
-				if err != nil {
-					fmt.Println(err)
-					return
-				} else {
-					fmt.Println("successed: Installing postgresql driver")
-				}
 				data = Database{
-					Type:       database,
+					Type:       "postgres",
 					DataSource: "\"postgresql://%s:%s@%s/%s?sslmode=disable\",os.Getenv(\"DB_USER\"),os.Getenv(\"DB_PASS\"),os.Getenv(\"DB_HOST\"),os.Getenv(\"DB_NAME\"),",
 					Package:    "github.com/lib/pq",
+					Command:   	"go get github.com/lib/pq",
 				}
 			} else {
-				fmt.Println("Specified your database type. ex: mysql,postgresql")
-				return
+				return errors.New("Specified your database type. ex: mysql,postgresql")
+			}
+
+			_, err := util.ExecuteCommand(data.Command)
+			if err != nil {
+				return err
+			} else {
+				fmt.Println("successed: Installing "+data.Type+" driver")
 			}
 
 			file, err := util.CreateFile("infrastructure/" + database + ".go")
 			if err != nil {
-				fmt.Println(err)
-				return
+				return err
 			} else {
 				fmt.Println("successed: Make file infrastructure/" + database + ".go")
 			}
 
 			fileString, err := template.GetFileString("file-template/sql.tmpl")
 			if err != nil {
-				fmt.Println(err)
-				return
+				return err
 			}
 
 			err = util.ExecuteTemplate(data, "sql.tmpl", fileString, file)
 			if err != nil {
-				fmt.Println(err)
-				return
+				return err
 			} else {
 				fmt.Println("successed: Create " + database + " database connection")
 			}
+		}else{
+			cmd.Help()
 		}
+		return nil
 	},
 }
 
 func init() {
-	infraCmd.Flags().StringVarP(&database, "db", "d", "", "Flag to generate database connection")
-
+	infraCmd.Flags().StringVarP(&database, "db", "d", "", "Flag to generate database connection. infra-spesific-type: mysql,postgresql")
+  
 	rootCmd.AddCommand(infraCmd)
 
 	// Here you will define your flags and configuration settings.
