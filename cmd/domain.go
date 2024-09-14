@@ -18,7 +18,7 @@ type Data struct {
 var domainCmd = &cobra.Command{
 	Use:   "domain [<name>]",
 	Short: "Generate domain [<name>] components",
-	Long: ``,
+	Long: `This command generates a domain component for your project. Provide a domain name as an argument, and a corresponding Go file will be created in the "domain" directory using a predefined template.`,
 	RunE: func(cmd *cobra.Command, args []string) error{
 		if len(args) == 0 {
 			return errors.New("specified your domain name")
