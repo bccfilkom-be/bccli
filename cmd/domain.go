@@ -18,14 +18,9 @@ type Data struct {
 
 // domainCmd represents the domain command
 var domainCmd = &cobra.Command{
-	Use:   "domain",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "domain [<name>]",
+	Short: "Generate domain [<name>] components",
+	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			fmt.Println("Specified your domain name")
@@ -64,7 +59,7 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	generateCmd.AddCommand(domainCmd)
+	rootCmd.AddCommand(domainCmd)
 
 	// Here you will define your flags and configuration settings.
 
