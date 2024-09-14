@@ -23,7 +23,7 @@ var appOpts appOptions
 var appCmd = &cobra.Command{
 	Use:          "app [<name>]",
 	Short:        "Generate app [<name>] components",
-	Long:         ``,
+	Long:         `This command generates app components for your project. You can provide the app name as an argument, and the command will create the necessary folders and files for that app. If no flags are specified, all core components (handler, repository, and usecase) will be generated. You can also customize the generation process by using flags to generate specific components such as handlers, repositories, or usecases. This simplifies the process of setting up a new app module in your project.`,
 	Args:         cobra.ExactArgs(1),
 	SilenceUsage: true,
 
