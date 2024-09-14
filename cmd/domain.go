@@ -6,6 +6,7 @@ package cmd
 import (
 	"be-cli/template"
 	"be-cli/util"
+	"errors"
 	"fmt"
 
 	"github.com/gobeam/stringy"
@@ -21,18 +22,16 @@ var domainCmd = &cobra.Command{
 	Use:   "domain [<name>]",
 	Short: "Generate domain [<name>] components",
 	Long: ``,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error{
 		if len(args) == 0 {
-			fmt.Println("Specified your domain name")
-			return
+			return errors.New("specified your domain name")
 		}
 
 		str := stringy.New(args[0])
 		domainName := str.CamelCase()
 		file, err := util.CreateFile("domain/" + domainName + ".go")
 		if err != nil {
-			fmt.Println(err)
-			return
+			return err
 		} else {
 			fmt.Println("successed: Make file domain/" + domainName + ".go")
 		}
@@ -43,31 +42,21 @@ var domainCmd = &cobra.Command{
 
 		fileString, err := template.GetFileString("file-template/domain.tmpl")
 		if err != nil {
-			fmt.Println(err)
-			return
+			return err
 		}
 
 
 		err = util.ExecuteTemplate(data, "domain.tmpl", fileString, file)
 		if err != nil {
-			fmt.Println(err)
-			return
+			return err
 		} else {
 			fmt.Println("successed: Create " + domainName + " domain")
 		}
+
+		return nil
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(domainCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// domainCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// domainCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
