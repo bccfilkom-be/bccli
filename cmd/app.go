@@ -82,7 +82,7 @@ func init() {
 	appCmd.Flags().BoolVar(&appOpts.repository, "repository", false, "Generate repository component")
 	appCmd.Flags().BoolVar(&appOpts.usecase, "usecase", false, "Generate usecase component")
 
-	generateCmd.AddCommand(appCmd)
+	rootCmd.AddCommand(appCmd)
 }
 
 // Generate a Component along with its folder. This also include file and test file
