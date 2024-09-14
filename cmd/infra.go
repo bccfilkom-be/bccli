@@ -23,10 +23,16 @@ type Database struct {
 
 // infraCmd represents the infra command
 var infraCmd = &cobra.Command{
-	Use:   "infra [<name>]",
-	Short: "Generate infra [<name>] components",
+	Use:   "infra [flags]",
+	Short: "Generate infra [flags] components",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
+
+		if cmd.Flags().NFlag() == 0 {
+			fmt.Println("error: please specified your flag. ex: --db=mysql")
+			return
+		}
+
 		if database != "" {
 			var data Database
 			if database == "mysql" {
