@@ -92,7 +92,7 @@ to quickly create a Cobra application.`,
 func init() {
 	infraCmd.Flags().StringVarP(&database, "db", "d", "", "Flag to generate database connection")
 
-	generateCmd.AddCommand(infraCmd)
+	rootCmd.AddCommand(infraCmd)
 
 	// Here you will define your flags and configuration settings.
 
