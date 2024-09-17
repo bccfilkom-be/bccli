@@ -9,7 +9,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/bccfilkom-be/bccli/util"
+	"github.com/bccfilkom-be/bccli/internal/file"
 	"github.com/gobeam/stringy"
 	"github.com/spf13/cobra"
 )
@@ -116,7 +116,7 @@ func generateComponentWithMock(appName string, componentName string) error {
 
 // Create and Write File components that include package name inside
 func createAndWriteFile(filePath string, componentName string) error {
-	fi, err := util.CreateFile(filePath)
+	fi, err := file.Create(filePath)
 	if err != nil {
 		return err
 	}

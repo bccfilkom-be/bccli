@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/bccfilkom-be/bccli/util"
-  "github.com/bccfilkom-be/bccli/template"
+	_file "github.com/bccfilkom-be/bccli/internal/file"
+	"github.com/bccfilkom-be/bccli/internal/shell"
+	"github.com/bccfilkom-be/bccli/internal/template"
 	"github.com/gobeam/stringy"
 	"github.com/spf13/cobra"
 )
@@ -38,7 +39,7 @@ This project purposed for building REST API with clean architecture inspired by 
 		}
 
 		command := "go mod init " + projectName
-		_, err := util.ExecuteCommand(command)
+		_, err := shell.Execute(command)
 		if err != nil {
 			return err
 		}
@@ -47,7 +48,7 @@ This project purposed for building REST API with clean architecture inspired by 
 		//gin init
 		fmt.Println("installing gin ...")
 
-		_, err = util.ExecuteCommand("go get -u github.com/gin-gonic/gin")
+		_, err = shell.Execute("go get -u github.com/gin-gonic/gin")
 		if err != nil {
 			return err
 		}
@@ -61,7 +62,7 @@ This project purposed for building REST API with clean architecture inspired by 
 		fmt.Printf(successCreateDirectory, "app")
 
 		//create directory cmd, file cmd/main.go, give content to main.go
-		file, err := util.CreateFile("cmd/main.go")
+		file, err := _file.Create("cmd/main.go")
 		if err != nil {
 			return err
 		}
@@ -72,7 +73,7 @@ This project purposed for building REST API with clean architecture inspired by 
 			return err
 		}
 
-		err = util.ExecuteTemplate(nil, "main.tmpl", fileString, file)
+		err = template.Execute(nil, "main.tmpl", fileString, file)
 		if err != nil {
 			return err
 		}
@@ -97,7 +98,7 @@ This project purposed for building REST API with clean architecture inspired by 
 		fmt.Printf(successCreateDirectory, "middleware")
 
 		//create directory rest, file rest/rest.go, give content to rest.go
-		file, err = util.CreateFile("middleware/rest/rest.go")
+		file, err = _file.Create("middleware/rest/rest.go")
 		if err != nil {
 			return err
 		}
@@ -115,19 +116,19 @@ This project purposed for building REST API with clean architecture inspired by 
 		fmt.Println("successed: Make directory util")
 
 		//create file .env
-		if _, err := util.CreateFile(".env"); err != nil {
+		if _, err := _file.Create(".env"); err != nil {
 			return err
 		}
 		fmt.Printf(successCreateFile, ".env")
 
 		//create file .env.example
-		if _, err := util.CreateFile(".env.example"); err != nil {
+		if _, err := _file.Create(".env.example"); err != nil {
 			return err
 		}
 		fmt.Printf(successCreateFile, ".env.example")
 
 		//create file .gitignore and give it content
-		file, err = util.CreateFile(".gitignore")
+		file, err = _file.Create(".gitignore")
 		if err != nil {
 			return err
 		}
@@ -139,28 +140,28 @@ This project purposed for building REST API with clean architecture inspired by 
 		}
 
 		//create file README.md
-		if _, err := util.CreateFile("README.md"); err != nil {
+		if _, err := _file.Create("README.md"); err != nil {
 			fmt.Println(err)
 			return err
 		}
 		fmt.Printf(successCreateFile, "README.md")
 
 		//create file Dockerfile
-		if _, err := util.CreateFile("Dockerfile"); err != nil {
+		if _, err := _file.Create("Dockerfile"); err != nil {
 			fmt.Println(err)
 			return err
 		}
 		fmt.Printf(successCreateFile, "Dockerfile")
 
 		//create file //docker-compose.yaml
-		if _, err := util.CreateFile("docker-compose.yaml"); err != nil {
+		if _, err := _file.Create("docker-compose.yaml"); err != nil {
 			fmt.Println(err)
 			return err
 		}
 		fmt.Printf(successCreateFile, "docker-compose.yaml")
 
 		//create mark file and give content
-		file, err = util.CreateFile(".mark")
+		file, err = _file.Create(".mark")
 		if err != nil {
 			return err
 		}

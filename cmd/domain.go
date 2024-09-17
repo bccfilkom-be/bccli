@@ -6,8 +6,8 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/bccfilkom-be/bccli/template"
-	"github.com/bccfilkom-be/bccli/util"
+	"github.com/bccfilkom-be/bccli/internal/file"
+	"github.com/bccfilkom-be/bccli/internal/template"
 	"github.com/gobeam/stringy"
 	"github.com/spf13/cobra"
 )
@@ -35,7 +35,7 @@ to quickly create a Cobra application.`,
 
 		str := stringy.New(args[0])
 		domainName := str.SnakeCase().ToLower()
-		file, err := util.CreateFile("domain/" + domainName + ".go")
+		file, err := file.Create("domain/" + domainName + ".go")
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -53,7 +53,7 @@ to quickly create a Cobra application.`,
 			return
 		}
 
-		err = util.ExecuteTemplate(data, "domain.tmpl", fileString, file)
+		err = template.Execute(data, "domain.tmpl", fileString, file)
 		if err != nil {
 			fmt.Println(err)
 			return
