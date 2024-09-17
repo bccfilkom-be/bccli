@@ -7,22 +7,26 @@ import (
 )
 
 //go:embed tmpl
-var fs embed.FS
+var tmpl embed.FS
 
-func Execute(data interface{}, templateFile string, fileString string, file *os.File) error {
-	tmplHandler, err := _template.New(templateFile).Parse(fileString)
+func Execute(data interface{}, filename string, file *os.File) error {
+	filename += ".tmpl"
+	_content, err := content(filename)
 	if err != nil {
 		return err
 	}
-	err = tmplHandler.Execute(file, data)
+	tmpl, err := _template.New(filename).Parse(_content)
 	if err != nil {
+		return err
+	}
+	if err := tmpl.Execute(file, data); err != nil {
 		return err
 	}
 	return nil
 }
 
-func GetFileString(templatePath string) (string, error) {
-	fileString, err := fs.ReadFile(templatePath)
+func content(file string) (string, error) {
+	fileString, err := tmpl.ReadFile(file)
 	if err != nil {
 		return "", err
 	}

@@ -66,12 +66,7 @@ var infraCmd = &cobra.Command{
 			fmt.Println("successed: Make file infrastructure/" + database + ".go")
 		}
 
-		fileString, err := template.GetFileString("file-template/sql.tmpl")
-		if err != nil {
-			return err
-		}
-
-		err = template.Execute(data, "sql.tmpl", fileString, file)
+		err = template.Execute(data, "sql", file)
 		if err != nil {
 			return err
 		} else {

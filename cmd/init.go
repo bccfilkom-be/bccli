@@ -68,12 +68,7 @@ This project purposed for building REST API with clean architecture inspired by 
 		}
 		fmt.Printf(successCreateFile, "cmd/main.go")
 
-		fileString, err := template.GetFileString("file-template/main.tmpl")
-		if err != nil {
-			return err
-		}
-
-		err = template.Execute(nil, "main.tmpl", fileString, file)
+		err = template.Execute(nil, "main", file)
 		if err != nil {
 			return err
 		}

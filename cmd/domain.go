@@ -47,13 +47,7 @@ to quickly create a Cobra application.`,
 			Domain: str.CamelCase(),
 		}
 
-		fileString, err := template.GetFileString("file-template/domain.tmpl")
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
-		err = template.Execute(data, "domain.tmpl", fileString, file)
+		err = template.Execute(data, "domain", file)
 		if err != nil {
 			fmt.Println(err)
 			return
