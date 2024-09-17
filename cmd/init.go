@@ -1,7 +1,3 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
@@ -13,7 +9,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var projectName string
 // initCmd represents the init command
 var initCmd = &cobra.Command{
 	Use:   "init",
@@ -28,7 +23,7 @@ var initCmd = &cobra.Command{
 		str := stringy.New(args[0])
 
 		//make new project directory
-		projectName = str.SnakeCase().ToLower()
+		projectName := str.SnakeCase().ToLower()
 		if err := os.MkdirAll(projectName, os.ModePerm); err != nil {
 			fmt.Println(err)
 			return
@@ -66,7 +61,7 @@ var initCmd = &cobra.Command{
 			fmt.Println("successed: Make directory app")
 		}
 
-		if _,err := util.CreateFile("cmd/main.go"); err != nil {
+		if _, err := util.CreateFile("cmd/main.go"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
@@ -101,7 +96,7 @@ var initCmd = &cobra.Command{
 			fmt.Println("successed: Make directory middleware")
 		}
 
-		if _,err := util.CreateFile("rest/rest.go"); err != nil {
+		if _, err := util.CreateFile("rest/rest.go"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
@@ -115,35 +110,35 @@ var initCmd = &cobra.Command{
 			fmt.Println("successed: Make directory util")
 		}
 
-		if _,err := util.CreateFile(".env"); err != nil {
+		if _, err := util.CreateFile(".env"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
 			fmt.Println("successed: Make file .env")
 		}
 
-		if _,err := util.CreateFile(".gitignore"); err != nil {
+		if _, err := util.CreateFile(".gitignore"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
 			fmt.Println("successed: Make file .gitignore")
 		}
 
-		if _,err := util.CreateFile("README.md"); err != nil {
+		if _, err := util.CreateFile("README.md"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
 			fmt.Println("successed: Make file README.md")
 		}
 
-		if _,err := util.CreateFile("Dockerfile"); err != nil {
+		if _, err := util.CreateFile("Dockerfile"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
 			fmt.Println("successed: Make file Dockerfile")
 		}
 
-		if _,err := util.CreateFile("docker-compose.yaml"); err != nil {
+		if _, err := util.CreateFile("docker-compose.yaml"); err != nil {
 			fmt.Println(err)
 			return
 		} else {
@@ -160,14 +155,4 @@ var initCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(initCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// initCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// initCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

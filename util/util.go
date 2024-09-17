@@ -2,14 +2,14 @@ package util
 
 import (
 	"errors"
+	"text/template"
 	"os"
 	"os/exec"
 	"runtime"
 	"strings"
-	"text/template"
 )
 
-func CreateFile(name string) (*os.File,error) {
+func CreateFile(name string) (*os.File, error) {
 	_, err := os.Stat(name)
 
 	if os.IsNotExist(err) {
@@ -18,19 +18,18 @@ func CreateFile(name string) (*os.File,error) {
 
 			err := os.MkdirAll(path, os.ModePerm)
 			if err != nil {
-				return nil,err
+				return nil, err
 			}
 		}
 
 		file, err := os.Create(name)
 		if err != nil {
-			return nil,err
+			return nil, err
 		}
-		return file,nil
+		return file, nil
 	} else {
-		return nil,errors.New("file already exist")
+		return nil, errors.New("file already exist")
 	}
-
 }
 
 func ExecuteCommand(command string) (string, error) {
@@ -46,7 +45,7 @@ func ExecuteCommand(command string) (string, error) {
 	return string(output), err
 }
 
-func ExecuteTemplate(data interface{}, templateFile string, fileString string, file *os.File)(error){
+func ExecuteTemplate(data interface{}, templateFile string, fileString string, file *os.File) error {
 	tmplHandler, err := template.New(templateFile).Parse(fileString)
 	if err != nil {
 		return err
