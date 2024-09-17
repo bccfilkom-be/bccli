@@ -78,7 +78,6 @@ var infraCmd = &cobra.Command{
 		}
 
 		return nil
-	},
 }
 
 func init() {
