@@ -78,10 +78,11 @@ var infraCmd = &cobra.Command{
 		}
 
 		return nil
+	},
 }
 
 func init() {
-	infraCmd.Flags().StringVarP(&database, "db", "d", "", "Flag to generate database connection. infra-spesific-type: mysql,postgresql")
+	infraCmd.Flags().StringVarP(&database, "database", "d", "", "Flag to generate database connection. infra-spesific-type: mysql,postgresql")
 
 	rootCmd.AddCommand(infraCmd)
 }
