@@ -2,12 +2,11 @@ package util
 
 import (
 	"errors"
-	"html/template"
+	"text/template"
 	"os"
 	"os/exec"
 	"runtime"
 	"strings"
-	"text/template"
 )
 
 func CreateFile(name string) (*os.File, error) {
