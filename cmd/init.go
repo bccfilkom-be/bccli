@@ -97,7 +97,7 @@ This project purposed for building REST API with clean architecture inspired by 
 		fmt.Printf(successCreateDirectory, "middleware")
 
 		//create directory rest, file rest/rest.go, give content to rest.go
-		file, err = util.CreateFile("rest/rest.go")
+		file, err = util.CreateFile("middleware/rest/rest.go")
 		if err != nil {
 			return err
 		}
