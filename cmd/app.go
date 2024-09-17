@@ -4,12 +4,12 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"be-cli/util"
 	"fmt"
 	"os"
 	"path"
 	"strings"
 
+	"github.com/bccfilkom-be/bccli/util"
 	"github.com/gobeam/stringy"
 	"github.com/spf13/cobra"
 )
@@ -82,7 +82,7 @@ func init() {
 	appCmd.Flags().BoolVar(&appOpts.repository, "repository", false, "Generate repository component")
 	appCmd.Flags().BoolVar(&appOpts.usecase, "usecase", false, "Generate usecase component")
 
-	generateCmd.AddCommand(appCmd)
+	rootCmd.AddCommand(appCmd)
 }
 
 // Generate a Component along with its folder. This also include file and test file

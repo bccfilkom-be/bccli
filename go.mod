@@ -1,5 +1,4 @@
-module be-cli
-
+module github.com/bccfilkom-be/bccli
 go 1.18
 
 require (

@@ -1,14 +1,11 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
-	"be-cli/template"
-	"be-cli/util"
 	"fmt"
 	"os"
 
+	"github.com/bccfilkom-be/bccli/util"
+  "github.com/bccfilkom-be/bccli/template"
 	"github.com/gobeam/stringy"
 	"github.com/spf13/cobra"
 )
