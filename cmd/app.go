@@ -4,12 +4,12 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"be-cli/util"
 	"fmt"
 	"os"
 	"path"
 	"strings"
 
+	"github.com/bccfilkom-be/bccli/util"
 	"github.com/gobeam/stringy"
 	"github.com/spf13/cobra"
 )

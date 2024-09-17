@@ -4,10 +4,10 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"be-cli/template"
-	"be-cli/util"
 	"fmt"
 
+	"github.com/bccfilkom-be/bccli/template"
+	"github.com/bccfilkom-be/bccli/util"
 	"github.com/gobeam/stringy"
 	"github.com/spf13/cobra"
 )
@@ -52,7 +52,6 @@ to quickly create a Cobra application.`,
 			fmt.Println(err)
 			return
 		}
-
 
 		err = util.ExecuteTemplate(data, "domain.tmpl", fileString, file)
 		if err != nil {

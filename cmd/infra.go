@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"be-cli/template"
-	"be-cli/util"
 	"fmt"
 
+	"github.com/bccfilkom-be/bccli/template"
+	"github.com/bccfilkom-be/bccli/util"
 	"github.com/spf13/cobra"
 )
 
@@ -23,7 +23,7 @@ type Database struct {
 var infraCmd = &cobra.Command{
 	Use:   "infra [flags]",
 	Short: "Generate infra [flags] components",
-	Long: `This command allows you to generate infrastructure components for your REST API project. You can specify the type of infrastructure you want to generate using the flag and provide the specific type of infrastructure as an argument. This command streamlines the process of creating essential infrastructure components for your REST API, such as databases, caching systems, or other dependencies. It ensures that your project has the necessary infrastructure in place to support its functionality. Customize the generated infrastructure components according to your project's specific requirements, and  use the appropriate flags and arguments to tailor the generation process.`,
+	Long:  `This command allows you to generate infrastructure components for your REST API project. You can specify the type of infrastructure you want to generate using the flag and provide the specific type of infrastructure as an argument. This command streamlines the process of creating essential infrastructure components for your REST API, such as databases, caching systems, or other dependencies. It ensures that your project has the necessary infrastructure in place to support its functionality. Customize the generated infrastructure components according to your project's specific requirements, and  use the appropriate flags and arguments to tailor the generation process.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		if cmd.Flags().NFlag() == 0 {

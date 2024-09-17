@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"be-cli/util"
 	"fmt"
 	"os"
 
+	"github.com/bccfilkom-be/bccli/util"
 	"github.com/gobeam/stringy"
 	"github.com/spf13/cobra"
 )
