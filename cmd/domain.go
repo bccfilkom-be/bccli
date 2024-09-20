@@ -47,7 +47,7 @@ to quickly create a Cobra application.`,
 			Domain: str.CamelCase(),
 		}
 
-		err = template.Execute(data, "domain", file)
+		err = template.Execute(file, "domain", data)
 		if err != nil {
 			fmt.Println(err)
 			return

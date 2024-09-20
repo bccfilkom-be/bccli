@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/bccfilkom-be/bccli/internal/file"
-	"github.com/bccfilkom-be/bccli/internal/shell"
 	"github.com/bccfilkom-be/bccli/internal/template"
 	"github.com/spf13/cobra"
 )
@@ -52,13 +51,6 @@ var infraCmd = &cobra.Command{
 			return fmt.Errorf("database type not found")
 		}
 
-		_, err := shell.Execute(data.Command)
-		if err != nil {
-			return err
-		} else {
-			fmt.Println("successed: Installing " + data.Type + " driver")
-		}
-
 		file, err := file.Create("infrastructure/" + database + ".go")
 		if err != nil {
 			return err
@@ -66,7 +58,7 @@ var infraCmd = &cobra.Command{
 			fmt.Println("successed: Make file infrastructure/" + database + ".go")
 		}
 
-		err = template.Execute(data, "sql", file)
+		err = template.Execute(file, "sql", data)
 		if err != nil {
 			return err
 		} else {

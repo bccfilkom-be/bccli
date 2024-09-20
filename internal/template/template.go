@@ -7,9 +7,9 @@ import (
 )
 
 //go:embed tmpl
-var tmpl embed.FS
+var fs embed.FS
 
-func Execute(data interface{}, filename string, file *os.File) error {
+func Execute(file *os.File, filename string, data interface{}) error {
 	filename += ".tmpl"
 	_content, err := content(filename)
 	if err != nil {
@@ -26,7 +26,7 @@ func Execute(data interface{}, filename string, file *os.File) error {
 }
 
 func content(file string) (string, error) {
-	fileString, err := tmpl.ReadFile(file)
+	fileString, err := fs.ReadFile(file)
 	if err != nil {
 		return "", err
 	}
