@@ -2,6 +2,7 @@ package template
 
 import (
 	"embed"
+	"fmt"
 	"os"
 	_template "text/template"
 )
@@ -10,12 +11,8 @@ import (
 var fs embed.FS
 
 func Execute(file *os.File, filename string, data interface{}) error {
-	filename += ".tmpl"
-	_content, err := content(filename)
-	if err != nil {
-		return err
-	}
-	tmpl, err := _template.New(filename).Parse(_content)
+	filename = fmt.Sprint(filename, ".tmpl")
+	tmpl, err := _template.New(filename).ParseFS(fs, fmt.Sprintf("tmpl/%s", filename))
 	if err != nil {
 		return err
 	}
@@ -23,12 +20,4 @@ func Execute(file *os.File, filename string, data interface{}) error {
 		return err
 	}
 	return nil
-}
-
-func content(file string) (string, error) {
-	fileString, err := fs.ReadFile(file)
-	if err != nil {
-		return "", err
-	}
-	return string(fileString), nil
 }
