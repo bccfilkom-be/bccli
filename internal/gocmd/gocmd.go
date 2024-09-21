@@ -3,6 +3,11 @@ package gocmd
 import "os/exec"
 
 // Init go module
+func Get(_package string) error {
+	return execute("get", "-u", _package)
+}
+
+// Init go module
 func Init(_package string) error {
 	return execute("mod", "init", _package)
 }

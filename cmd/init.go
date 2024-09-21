@@ -15,7 +15,7 @@ const (
 var Framework string
 
 func init() {
-	initCmd.Flags().StringVar(&Framework, "framework", "echo", "web framework of choice, i.e gin,echo,fiber,net,mux")
+	initCmd.Flags().StringVar(&Framework, "framework", "chi", "web framework of choice, [chi]")
 	rootCmd.AddCommand(initCmd)
 }
 
@@ -36,14 +36,9 @@ func _init(cmd *cobra.Command, args []string) error {
 	if err := gocmd.Init(name); err != nil {
 		return err
 	}
-
-	var gen framework.Generator
-	switch Framework {
-	default:
-		gen = framework.NewGenerator(framework.ECHO)
-	}
-	if err := gen.Main(); err != nil {
+	if err := framework.Main(framework.NewFramework(Framework)); err != nil {
 		return err
 	}
+
 	return nil
 }
