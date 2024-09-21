@@ -20,7 +20,7 @@ func mux() http.Handler {
 	r.Use(middleware.Logger)
 
 	v1 := chi.NewRouter()
-	r.Get("/status", func(w http.ResponseWriter, r *http.Request) {
+	v1.Get("/status", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Healthy"))
 	})
 	r.Mount("/api/v1", v1)

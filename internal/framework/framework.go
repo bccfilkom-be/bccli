@@ -53,7 +53,7 @@ func NewFramework(f string) Framework {
 }
 
 func Main(f Framework) error {
-	_file, err := file.Create("cmd/main.go")
+	_file, err := file.Create("cmd/api/main.go")
 	if err != nil {
 		return err
 	}
