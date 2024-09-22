@@ -34,11 +34,15 @@ var initCmd = &cobra.Command{
 func _init(cmd *cobra.Command, args []string) error {
 	arg := stringy.New(args[0])
 	name := arg.SnakeCase().ToLower()
+	_framework, err := framework.NewFramework(Framework)
+	if err != nil {
+		return err
+	}
 
 	if err := gocmd.Init(name); err != nil {
 		return err
 	}
-	if err := framework.Main(framework.NewFramework(Framework)); err != nil {
+	if err := framework.Main(_framework); err != nil {
 		return err
 	}
 	dockerfile, err := file.Create("Dockerfile")

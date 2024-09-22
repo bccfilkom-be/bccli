@@ -35,20 +35,20 @@ func (f Framework) String() string {
 	}
 }
 
-func NewFramework(f string) Framework {
+func NewFramework(f string) (Framework, error) {
 	switch f {
 	case "net":
-		return NET
+		return NET, nil
 	case "chi":
-		return CHI
+		return CHI, nil
 	case "mux":
-		return MUX
+		return MUX, nil
 	case "fiber":
-		return FIBER
+		return FIBER, nil
 	case "gin":
-		return GIN
+		return GIN, nil
 	default:
-		return -1
+		return -1, ErrNotExist
 	}
 }
 
