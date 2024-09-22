@@ -2,6 +2,7 @@ package template
 
 import (
 	"embed"
+	"fmt"
 	"os"
 	_template "text/template"
 )
@@ -9,22 +10,14 @@ import (
 //go:embed tmpl
 var fs embed.FS
 
-func Execute(data interface{}, templateFile string, fileString string, file *os.File) error {
-	tmplHandler, err := _template.New(templateFile).Parse(fileString)
+func Execute(file *os.File, filename string, data interface{}) error {
+	filename = fmt.Sprint(filename, ".tmpl")
+	tmpl, err := _template.New(filename).ParseFS(fs, fmt.Sprintf("tmpl/%s", filename))
 	if err != nil {
 		return err
 	}
-	err = tmplHandler.Execute(file, data)
-	if err != nil {
+	if err := tmpl.Execute(file, data); err != nil {
 		return err
 	}
 	return nil
-}
-
-func GetFileString(templatePath string) (string, error) {
-	fileString, err := fs.ReadFile(templatePath)
-	if err != nil {
-		return "", err
-	}
-	return string(fileString), nil
 }
