@@ -1,0 +1,9 @@
+package usecase
+
+type {{ .Domain }}UsecaseItf interface {}
+
+type {{ .DomainStruct }}Usecase struct {}
+
+func New{{ .Domain }}Usecase() {{ .Domain }}UsecaseItf {
+    return &{{ .DomainStruct }}Usecase{}
+}
