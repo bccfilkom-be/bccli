@@ -32,7 +32,7 @@ var generateCmd = &cobra.Command{
 	Use:   "generate",
 	Short: "Generate domain components like handler, usecase, and repository.",
 	Long: `Generate domain components like handler, usecase, and repository.
-You can choose to create specific components or generate all at once.`,
+By default it generate all component at once, but you can choose one or multiple.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 
 		if len(args) == 0 {
@@ -89,8 +89,8 @@ You can choose to create specific components or generate all at once.`,
 func init() {
 	generateCmd.Flags().BoolVarP(&appOpts.handler, "handler", "H", false, "Generate handler")
 	generateCmd.Flags().BoolVarP(&appOpts.usecase, "usecase", "U", false, "Generate usecase")
-	generateCmd.Flags().StringVarP(&appOpts.repository, "repository", "R", "", "Generate repository")
-	generateCmd.Flags().StringVarP(&database, "database", "d", "", "Flag to generate repository file. choose specific database: mysql,postgresql")
+	generateCmd.Flags().StringVarP(&appOpts.repository, "repository", "R", "", "Generate repository. choose specific database, ex: mysql,postgresql")
+	generateCmd.Flags().StringVarP(&database, "database", "d", "", "Flag to generate repository file. choose specific database, ex: mysql,postgresql")
 
 	DomainCmd.AddCommand(generateCmd)
 }
