@@ -7,16 +7,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var RootCmd = &cobra.Command{
+var rootCmd = &cobra.Command{
 	Use: "cmd",
 }
 
 func Execute() {
-	if err := RootCmd.Execute(); err != nil {
+	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
 }
 
 func init() {
-	RootCmd.AddCommand(domain.DomainCmd)
+	rootCmd.AddCommand(domain.DomainCmd)
 }
