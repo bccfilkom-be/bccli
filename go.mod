@@ -1,9 +1,10 @@
 module github.com/bccfilkom-be/bccli
+
 go 1.18
 
 require (
 	github.com/gobeam/stringy v0.0.6
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.1
 )
 
 require (

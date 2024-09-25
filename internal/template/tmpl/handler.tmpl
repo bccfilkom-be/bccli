@@ -1,0 +1,7 @@
+package rest
+
+type {{ .DomainStruct }}Handler struct {}
+
+func New{{ .Domain }}Handler() {
+    {{ .DomainStruct }}Handler := {{ .Domain}}Handler{}
+}
