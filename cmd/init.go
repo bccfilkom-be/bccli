@@ -20,7 +20,7 @@ var Framework string
 
 func init() {
 	initCmd.Flags().StringVar(&Framework, "framework", "chi", "web framework of choice, [chi]")
-	rootCmd.AddCommand(initCmd)
+	RootCmd.AddCommand(initCmd)
 }
 
 var initCmd = &cobra.Command{

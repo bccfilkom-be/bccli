@@ -3,13 +3,19 @@ package gocmd
 import "os/exec"
 
 // Init go module
-func Get(_package string) error {
-	return execute("get", "-u", _package)
+func Get(pkgs ...string) error {
+	for _, pkg := range pkgs {
+		err := execute("get", "-u", pkg)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // Init go module
-func Init(_package string) error {
-	return execute("mod", "init", _package)
+func Init(pkg string) error {
+	return execute("mod", "init", pkg)
 }
 
 // Print go version

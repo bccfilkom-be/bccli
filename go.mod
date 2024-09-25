@@ -1,6 +1,8 @@
 module github.com/bccfilkom-be/bccli
 
-go 1.18
+go 1.21
+
+toolchain go1.22.5
 
 require (
 	github.com/gobeam/stringy v0.0.6
