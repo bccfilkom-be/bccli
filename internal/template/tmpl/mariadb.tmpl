@@ -1,0 +1,10 @@
+package infra
+
+import (
+	"github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
+)
+
+func NewMariaDB(config mysql.Config) (*sqlx.DB, error) {
+	return sqlx.Open("mysql", config.FormatDSN())
+}

@@ -6,10 +6,8 @@ import (
 )
 
 var infraCmd = &cobra.Command{
-	Use:   "init <project-name>",
-	Short: "Initialize a new Go REST server project structure.",
-	Long:  "Bootstraps a new Go REST server project by generating the required files\nand directories for running a simple server.",
-	Args:  cobra.ExactArgs(1),
+	Use:   "infra <command>",
+	Short: "Infra layer command",
 }
 
 func init() {
