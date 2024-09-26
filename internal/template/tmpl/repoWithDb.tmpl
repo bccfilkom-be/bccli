@@ -1,0 +1,15 @@
+package repository
+
+import(
+    {{ .Module }}
+)
+
+type {{ .Domain }}{{ .Database }}Itf interface {}
+
+type {{ .DomainStruct }}{{ .Database }} struct {
+    db *{{ .DBDriver }}
+}
+
+func New{{ .Domain }}{{ .Database }}(db *{{ .DBDriver }}) {{ .Domain }}{{ .Database }}Itf {
+    return &{{ .DomainStruct }}{{ .Database }}{db}
+}
