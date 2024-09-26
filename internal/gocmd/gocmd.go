@@ -23,6 +23,11 @@ func Version() (string, error) {
 	return output("version")
 }
 
+// Tidy go module
+func Tidy() error {
+	return execute("mod", "tidy")
+}
+
 // Execute go command and return error if any
 func execute(args ...string) error {
 	return exec.Command("go", args...).Run()
