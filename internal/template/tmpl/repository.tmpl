@@ -1,0 +1,9 @@
+package repository
+
+type {{ .Domain }}{{ .Database }}Itf interface {}
+
+type {{ .DomainStruct }}{{ .Database }} struct {}
+
+func New{{ .Domain }}{{ .Database }}() {{ .Domain }}{{ .Database }}Itf {
+    return &{{ .DomainStruct }}{{ .Database }}{}
+}
