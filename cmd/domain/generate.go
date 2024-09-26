@@ -29,20 +29,20 @@ type appOptions struct {
 var (
 	appOpts  appOptions
 	database string
-	dbMap = map[string]struct{
-		name string
+	dbMap    = map[string]struct {
+		name   string
 		module string
 	}{
 		"mysql": {
-			name: "MySQL",
+			name:   "MySQL",
 			module: `"github.com/jmoiron/sqlx"`,
 		},
 		"mariadb": {
-			name: "MariaDB",
+			name:   "MariaDB",
 			module: `"github.com/jmoiron/sqlx"`,
 		},
 		"postgresql": {
-			name: "PostgreSQL",
+			name:   "PostgreSQL",
 			module: `"github.com/jackc/pgx/v5"`,
 		},
 	}
@@ -54,31 +54,12 @@ var generateCmd = &cobra.Command{
 	Long: `Generate domain components like handler, usecase, and repository.
 By default it generate all component at once, but you can choose one or multiple.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
-
 		if len(args) == 0 {
 			return errors.New("specified your domain name")
 		}
 
 		str := stringy.New(args[0])
 		domainName := str.SnakeCase().ToLower()
-		file, err := file.Create("internal/domain/" + domainName + ".go")
-		if err != nil {
-			return err
-		}
-
-		data := Data{
-			Domain: str.CamelCase(),
-		}
-
-		err = template.Execute(file, "domain", data)
-		if err != nil {
-			return err
-		}
-
-		if err := os.MkdirAll("internal/"+domainName, os.ModePerm); err != nil {
-			return err
-		}
-
 
 		if appOpts.repository != "" {
 			database = appOpts.repository
@@ -111,8 +92,26 @@ By default it generate all component at once, but you can choose one or multiple
 			return nil
 		}
 
-		err = generateAllComponent(domainName, database)
+		err := generateAllComponent(domainName, database)
 		if err != nil {
+			return err
+		}
+
+		file, err := file.Create("internal/domain/" + domainName + ".go")
+		if err != nil {
+			return err
+		}
+
+		data := Data{
+			Domain: str.CamelCase(),
+		}
+
+		err = template.Execute(file, "domain", data)
+		if err != nil {
+			return err
+		}
+
+		if err := os.MkdirAll("internal/"+domainName, os.ModePerm); err != nil {
 			return err
 		}
 
@@ -132,7 +131,7 @@ func init() {
 }
 
 func generateAllComponent(domainName, database string) error {
-	components := []string{"handler", "repository", "usecase"}
+	components := []string{"repository", "handler", "usecase"}
 	for _, component := range components {
 		if err := generateComponent(domainName, component, database); err != nil {
 			return err
@@ -144,8 +143,8 @@ func generateAllComponent(domainName, database string) error {
 
 func generateComponent(domainName, componentName, database string) error {
 	pathMap := map[string]string{
-		"handler":    "interface/rest",
 		"repository": "repository",
+		"handler":    "interface/rest",
 		"usecase":    "usecase",
 	}
 
@@ -168,8 +167,7 @@ func generateComponent(domainName, componentName, database string) error {
 			return createAndWriteFile(filePath, componentName, domainName)
 		}
 
-		
-		return os.MkdirAll(dirPath, os.ModePerm)
+		return errors.New("database not found")
 	}
 
 	filePath := path.Join(dirPath, fmt.Sprintf("%s.go", domainName))
@@ -178,7 +176,7 @@ func generateComponent(domainName, componentName, database string) error {
 
 func createAndWriteFile(filePath, componentName, domainName string) error {
 	str := stringy.New(domainName)
-	
+
 	dbMap := dbMap[database]
 
 	data := Data{
