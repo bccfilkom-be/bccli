@@ -1,9 +1,9 @@
 package repository
 
-type {{ .Domain }}RepositoryItf interface {}
+type {{ .Domain }}{{ .Database }}Itf interface {}
 
-type {{ .DomainStruct }}Repository struct {}
+type {{ .DomainStruct }}{{ .Database }} struct {}
 
-func New{{ .Domain }}Repository() {{ .Domain }}RepositoryItf {
-    return &{{ .DomainStruct }}Repository{}
+func New{{ .Domain }}{{ .Database }}() {{ .Domain }}{{ .Database }}Itf {
+    return &{{ .DomainStruct }}{{ .Database }}{}
 }

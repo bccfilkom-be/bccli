@@ -46,5 +46,7 @@ func gen(cmd *cobra.Command, args []string) error {
 	if err := template.Execute(file, service, nil); err != nil {
 		return err
 	}
+
+	fmt.Printf("service %s succesfully generated", service)
 	return nil
 }

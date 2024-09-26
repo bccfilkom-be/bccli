@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"runtime"
 
 	"github.com/bccfilkom-be/bccli/internal/file"
@@ -9,11 +10,6 @@ import (
 	"github.com/bccfilkom-be/bccli/internal/template"
 	"github.com/gobeam/stringy"
 	"github.com/spf13/cobra"
-)
-
-const (
-	successCreateFile      string = "successed: Make file %s\n"
-	successCreateDirectory string = "successed: Make Directory %s\n"
 )
 
 var Framework string
@@ -67,5 +63,10 @@ func _init(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	if err := gocmd.Tidy(); err != nil {
+		return err
+	}
+
+	fmt.Printf("project %s successfully initialized", name)
 	return nil
 }
