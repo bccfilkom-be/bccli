@@ -103,7 +103,7 @@ By default it generate all component at once, but you can choose one or multiple
 		}
 
 		data := Data{
-			Domain: str.CamelCase(),
+			Domain: str.CamelCase().Get(),
 		}
 
 		err = template.Execute(file, "domain", data)
@@ -180,7 +180,7 @@ func createAndWriteFile(filePath, componentName, domainName string) error {
 	dbMap := dbMap[database]
 
 	data := Data{
-		Domain:       str.CamelCase(),
+		Domain:       str.CamelCase().Get(),
 		DomainStruct: str.SnakeCase().ToLower(),
 		Database:     dbMap.name,
 	}
