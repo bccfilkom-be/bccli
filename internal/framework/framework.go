@@ -35,6 +35,21 @@ func (f Framework) String() string {
 	}
 }
 
+func (f Framework) Package() string {
+	switch f {
+	case CHI:
+		return "github.com/go-chi/chi/v5"
+	case MUX:
+		return "github.com/gorilla/mux"
+	case FIBER:
+		return "github.com/gofiber/fiber/v2"
+	case GIN:
+		return "github.com/gin-gonic/gin"
+	default:
+		return ""
+	}
+}
+
 func NewFramework(f string) (Framework, error) {
 	switch f {
 	case "net":
@@ -57,7 +72,7 @@ func Main(f Framework) error {
 	if err != nil {
 		return err
 	}
-	if err := gocmd.Get(chi); err != nil {
+	if err := gocmd.Get(f.Package()); err != nil {
 		return err
 	}
 	if err := template.Execute(_file, fmt.Sprintf("%s_main", f), nil); err != nil {
