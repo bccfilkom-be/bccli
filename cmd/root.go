@@ -7,7 +7,7 @@ import (
 )
 
 var RootCmd = &cobra.Command{
-	Use: "cmd",
+	Use: "bccli",
 }
 
 func Execute() {
@@ -15,4 +15,3 @@ func Execute() {
 		os.Exit(1)
 	}
 }
-
