@@ -1,4 +1,4 @@
-# ``bccli`` - A CLI for Back-End Engineers
+# bccli - A CLI for Back-End Engineers
 
 bccli is a simple cli tool for setting up server project structure based on thee-layered archictecture that is controller, usecase, and repository.
 
@@ -72,7 +72,7 @@ internal/
 ```
 
 ### Set up Infrastucture
-The ``infra`` command is used to setting up databases and other infrastructure components.
+The ``infra`` command is used to set 3rd party libraries or other external component of the app
 
 
 ```bash
@@ -85,6 +85,6 @@ internal/
 └── infra/
     └── mysql.go
 ```
-You can choose antother database like postgres or mariadb to scaffold the corresponding setup.
+You can choose another database like postgres or mariadb to scaffold the corresponding setup.
 ## License
 This repository is licensed under the [MIT License](LICENSE).
