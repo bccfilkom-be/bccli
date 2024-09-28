@@ -1,4 +1,4 @@
-# bccli - A CLI for Back-End Engineers
+# bccli
 
 bccli is a simple cli tool for setting up server project structure based on thee-layered archictecture that is controller, usecase, and repository.
 
