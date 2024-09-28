@@ -1,13 +1,15 @@
-# bccli - A CLI for Back-End Engineers
+# ``bccli`` - A CLI for Back-End Engineers
 
-`bccli` is a command-line interface (CLI) tool designed for back-end engineers to quickly set up projects based on clean architecture principles. It provides commands to generate the essential structure of an application, including handlers, services, repositories, and infrastructure components.
+`bccli` is a command-line interface (CLI) tool designed to assist back-end engineers in setting up project structures based on clean architecture. It helps developers quickly scaffold the necessary components such as handlers, services, repositories, and infrastructure, reducing the overhead of manual setup and keeping your codebase organized and maintainable.
 
-## Features
+## Why use bccli?
+bccli is designed to simplify the workflow of back-end engineers by automating the setup of key components in a project, all based on clean architecture principles.
 
-- **Project Initialization**: Quickly set up a new project directory with all the necessary folders.
-- **Application Components**: Generate handler, service, and repository files for your application modules.
-- **Domain Entities**: Create domain-specific structs with ease.
-- **Infrastructure Setup**: Scaffold infrastructure like databases inside your project.
+### Key Features
+
+- **Project Initialization**: Set up a new project directory with the required structure and files, ready for development.
+- **Domain Components**: Generate handlers, services, repositories, and domain-specific entities in one go, maintaining a clean separation of concerns.
+- **Infrastructure Setup**: Quickly scaffold infrastructure components, such as databases, and integrate them into your project.
 
 ## Installation
 
@@ -17,18 +19,34 @@ Make sure you have [Go](https://golang.org/dl/) installed on your device.
 go install github.com/bccfilkom-be/bccli
 ```
 
-## Quick Start
+## Usage
+```
+Usage:
+  bccli [command]
 
-### Initialize a new project
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  domain      Generate domain components like handler, usecase, and repository.
+  help        Help about any command
+  infra       Infra layer command
+  init        Initialize a new Go REST server project structure.
 
-
-```bash
-bccli init todoapp
+Flags:
+  -h, --help   help for bccli
 ```
 
-This will generate the structure like this
+## Command Overview
+
+### Initialize a new project
+The ``init`` command sets up the initial project structure, making it easy to start developing right away. By simply running the following command:
+
 ```bash
-todoapp/
+bccli init todo
+```
+
+This will create a new folder ``todo`` with the following structure:
+```bash
+todo/
 ├── cmd/
 │   └── api/
 │       └── main.go
@@ -41,60 +59,40 @@ todoapp/
 └── Makefile
 ```
 
-### Create a new app module
-
-Generates the handler, service, and repository files for a specific app module.
-
-- Create the app handler, service, and repository files inside the `internal/<app_name>/` folder.
-- If you also want to generate data storage implementation (MySQL, PostgreSQL, etc.) for the repository, you can pass a database flag and choose your database.
-
-```bash
-bccli app todo
-```
-
-This will generate
-```bash
-internal/
-├── domain/
-├── infra/
-└── todo/
-    ├── interface/
-    │   └── rest/
-    │       └── todo.go
-    ├── repository/
-    └── service/
-        └── todo.go
-```
 ### Create a domain entity
-
-Creates a domain entity file containing the struct for a given domain name.
-- Creates a new file in the internal/domain/ folder for the given domain.
+The ``domain`` command used to create a new domain entity. This command scaffolds domain files in a structured manner, ensuring separation of concerns and clear layers.
 
 ```bash
 bccli domain todo
 ```
-This will generate:
+This command generates a domain for ``todo`` and creates related files in the following structure:
 ```bash
 internal/
 ├── domain/
 │   └── todo.go
+├── todo/
+│   ├── interface/
+│   │   └── rest/
+│   │       └── todo.go
+│   ├── repository/
+│   └── service/
+│       └── todo.go
 └── infra/
 ```
 
 ### Set up Infrastucture
-Sets up the infrastructure for your project.
-- --db: Initializes a database setup file inside the internal/infra/ folder.
+Setting up databases and other infrastructure components with the ``infra`` command. Use it to scaffold infrastructure setup, such as databases, caching systems, or external services:
 
 ```bash
 bccli infra --db=mysql
 ```
-This will generate:
+This command generates a basic MySQL configuration file:
 ```bash
 internal/
 ├── domain/
 └── infra/
     └── mysql.go
 ```
-
+You can use the --db flag with other options like postgres or mariadb to scaffold the corresponding setup.
 ## License
 This repository is licensed under the [MIT License](LICENSE).
