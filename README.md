@@ -1,15 +1,6 @@
 # ``bccli`` - A CLI for Back-End Engineers
 
-`bccli` is a command-line interface (CLI) tool designed to assist back-end engineers in setting up project structures based on clean architecture. It helps developers quickly scaffold the necessary components such as handlers, services, repositories, and infrastructure, reducing the overhead of manual setup and keeping your codebase organized and maintainable.
-
-## Why use bccli?
-bccli is designed to simplify the workflow of back-end engineers by automating the setup of key components in a project, all based on clean architecture principles.
-
-### Key Features
-
-- **Project Initialization**: Set up a new project directory with the required structure and files, ready for development.
-- **Domain Components**: Generate handlers, services, repositories, and domain-specific entities in one go, maintaining a clean separation of concerns.
-- **Infrastructure Setup**: Quickly scaffold infrastructure components, such as databases, and integrate them into your project.
+``bccli`` is a simple cli tool for setting up server project structure based on thee-layered archictecture that is controller, usecase, and repository.
 
 ## Installation
 
@@ -38,13 +29,13 @@ Flags:
 ## Command Overview
 
 ### Initialize a new project
-The ``init`` command sets up the initial project structure, making it easy to start developing right away. By simply running the following command:
+The ``init`` command sets up the initial project structure.
 
 ```bash
 bccli init todo
 ```
 
-This will create the project structure inside todo folder with the following structure:
+This will create the project structure inside ``todo`` folder with the following structure:
 ```bash
 todo/
 ├── cmd/
@@ -84,7 +75,7 @@ internal/
 Setting up databases and other infrastructure components with the ``infra`` command. Use it to scaffold infrastructure setup, such as databases, caching systems, or external services:
 
 ```bash
-bccli infra generate --db=mysql
+bccli infra generate --database=mysql
 ```
 This command generates a basic MySQL configuration file:
 ```bash
@@ -93,6 +84,6 @@ internal/
 └── infra/
     └── mysql.go
 ```
-You can use the --db flag with other options like postgres or mariadb to scaffold the corresponding setup.
+You can use the --database flag with other options like postgres or mariadb to scaffold the corresponding setup.
 ## License
 This repository is licensed under the [MIT License](LICENSE).
