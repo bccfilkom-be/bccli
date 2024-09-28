@@ -72,7 +72,7 @@ internal/
 ```
 
 ### Set up Infrastucture
-The ``infra`` command is used to set 3rd party libraries or other external component of the app
+The ``infra`` command is used to set 3rd party service libraries or other external component of the app
 
 
 ```bash
