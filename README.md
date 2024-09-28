@@ -63,7 +63,7 @@ todo/
 The ``domain`` command used to create a new domain entity. This command scaffolds domain files in a structured manner, ensuring separation of concerns and clear layers.
 
 ```bash
-bccli domain todo
+bccli domain generate todo
 ```
 This command generates a domain for ``todo`` and creates related files in the following structure:
 ```bash
@@ -84,7 +84,7 @@ internal/
 Setting up databases and other infrastructure components with the ``infra`` command. Use it to scaffold infrastructure setup, such as databases, caching systems, or external services:
 
 ```bash
-bccli infra --db=mysql
+bccli infra generate --db=mysql
 ```
 This command generates a basic MySQL configuration file:
 ```bash
