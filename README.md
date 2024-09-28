@@ -35,7 +35,7 @@ The ``init`` command sets up the initial project structure.
 bccli init todo
 ```
 
-This will create the project structure inside todo folder with the following structure:
+This will create the project structure inside **todo** folder with the following structure:
 ```bash
 todo/
 ├── cmd/
@@ -51,7 +51,7 @@ todo/
 ```
 
 ### Create a domain entity
-The ``domain`` command used to create a new domain entity.
+The ``domain generate`` command used to create a new domain entity.
 
 ```bash
 bccli domain generate todo
@@ -72,8 +72,7 @@ internal/
 ```
 
 ### Set up Infrastucture
-The ``infra`` command is used to set 3rd party service libraries or other external component of the app
-
+The ``infra generate`` command is used to generate 3rd party service libraries config or other external component of the app
 
 ```bash
 bccli infra generate mysql
