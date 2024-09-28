@@ -7,8 +7,7 @@ import (
 )
 
 func Create(name string) (*os.File, error) {
-	_, err := os.Stat(name)
-	if os.IsExist(err) {
+	if Exist(name) {
 		return nil, errors.New("file already exist")
 	}
 
@@ -25,4 +24,11 @@ func Create(name string) (*os.File, error) {
 	}
 
 	return file, nil
+}
+
+func Exist(filename string) bool {
+	if _, err := os.Stat(filename); errors.Is(err, os.ErrNotExist) {
+		return false
+	}
+	return true
 }

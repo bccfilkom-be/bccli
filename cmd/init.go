@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"runtime"
 
@@ -8,7 +9,6 @@ import (
 	"github.com/bccfilkom-be/bccli/internal/framework"
 	"github.com/bccfilkom-be/bccli/internal/gocmd"
 	"github.com/bccfilkom-be/bccli/internal/template"
-	"github.com/gobeam/stringy"
 	"github.com/spf13/cobra"
 )
 
@@ -28,13 +28,15 @@ var initCmd = &cobra.Command{
 }
 
 func _init(cmd *cobra.Command, args []string) error {
-	arg := stringy.New(args[0])
-	name := arg.SnakeCase().ToLower()
+	name := args[0]
 	_framework, err := framework.NewFramework(Framework)
 	if err != nil {
 		return err
 	}
 
+	if file.Exist("go.mod") {
+		return errors.New("project already initialized")
+	}
 	if err := gocmd.Init(name); err != nil {
 		return err
 	}
