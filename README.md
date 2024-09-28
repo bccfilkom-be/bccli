@@ -1,6 +1,6 @@
 # ``bccli`` - A CLI for Back-End Engineers
 
-``bccli`` is a simple cli tool for setting up server project structure based on thee-layered archictecture that is controller, usecase, and repository.
+bccli is a simple cli tool for setting up server project structure based on thee-layered archictecture that is controller, usecase, and repository.
 
 ## Installation
 
@@ -35,7 +35,7 @@ The ``init`` command sets up the initial project structure.
 bccli init todo
 ```
 
-This will create the project structure inside ``todo`` folder with the following structure:
+This will create the project structure inside todo folder with the following structure:
 ```bash
 todo/
 ├── cmd/
@@ -51,12 +51,12 @@ todo/
 ```
 
 ### Create a domain entity
-The ``domain`` command used to create a new domain entity. This command scaffolds domain files in a structured manner, ensuring separation of concerns and clear layers.
+The ``domain`` command used to create a new domain entity.
 
 ```bash
 bccli domain generate todo
 ```
-This command generates a domain for ``todo`` and creates related files in the following structure:
+This command generates a domain for todo and creates related files in the following structure:
 ```bash
 internal/
 ├── domain/
@@ -72,10 +72,11 @@ internal/
 ```
 
 ### Set up Infrastucture
-Setting up databases and other infrastructure components with the ``infra`` command. Use it to scaffold infrastructure setup, such as databases, caching systems, or external services:
+The ``infra`` command is used to setting up databases and other infrastructure components.
+
 
 ```bash
-bccli infra generate --database=mysql
+bccli infra generate mysql
 ```
 This command generates a basic MySQL configuration file:
 ```bash
@@ -84,6 +85,6 @@ internal/
 └── infra/
     └── mysql.go
 ```
-You can use the --database flag with other options like postgres or mariadb to scaffold the corresponding setup.
+You can choose antother database like postgres or mariadb to scaffold the corresponding setup.
 ## License
 This repository is licensed under the [MIT License](LICENSE).
