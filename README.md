@@ -44,7 +44,7 @@ The ``init`` command sets up the initial project structure, making it easy to st
 bccli init todo
 ```
 
-This will create a new folder ``todo`` with the following structure:
+This will create the project structure inside todo folder with the following structure:
 ```bash
 todo/
 ├── cmd/
