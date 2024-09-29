@@ -6,7 +6,7 @@ import (
 )
 
 var domainCmd = &cobra.Command{
-	Use: "domain",
+	Use:   "domain",
 	Short: "Generate domain components like handler, usecase, and repository.",
 }
 

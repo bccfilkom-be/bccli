@@ -1,100 +1,79 @@
-# bccli - A CLI for Back-End Engineers
-
-`bccli` is a command-line interface (CLI) tool designed for back-end engineers to quickly set up projects based on clean architecture principles. It provides commands to generate the essential structure of an application, including handlers, services, repositories, and infrastructure components.
-
-## Features
-
-- **Project Initialization**: Quickly set up a new project directory with all the necessary folders.
-- **Application Components**: Generate handler, service, and repository files for your application modules.
-- **Domain Entities**: Create domain-specific structs with ease.
-- **Infrastructure Setup**: Scaffold infrastructure like databases inside your project.
+# bccli
+bccli is a simple cli tool for setting up go server project based on Three-layered Archictecture combined with Domain Driven Design.
 
 ## Installation
-
-Make sure you have [Go](https://golang.org/dl/) installed on your device.
-
+Make sure you have [Go](https://go.dev/doc/install) installed on your device.
 ```bash
 go install github.com/bccfilkom-be/bccli
 ```
 
-## Quick Start
+## Usage
+```text
+Usage:
+  bccli [command]
+
+Available Commands:
+  completion  Generate the autocompletion script for the specified shell
+  domain      Generate domain components like handler, usecase, and repository.
+  help        Help about any command
+  infra       Infra layer command
+  init        Initialize a new Go REST server project structure.
+
+Flags:
+  -h, --help   help for bccli
+```
+
+## Command Overview
 
 ### Initialize a new project
-
-
+The ``init`` command sets up the initial project structure.
 ```bash
-bccli init todoapp
+mkdir go-server
+cd go-server
+bccli init github.com/bccfilkom-be/go-server
+```
+This will bootstrap the current directory with the following structure:
+```text
+cmd/
+└── api/
+    └── main.go
+Dockerfile
+go.mod
+go.sum
+Makefile
 ```
 
-This will generate the structure like this
+### Create a domain entity
+The ``domain generate`` command used to create a new domain entity with its layer.
 ```bash
-todoapp/
-├── cmd/
-│   └── api/
-│       └── main.go
-├── internal/
-│   ├── domain/
-│   └── infra/
-├── Dockerfile
-├── go.mod
-├── go.sum
-└── Makefile
+bccli domain generate todo
 ```
-
-### Create a new app module
-
-Generates the handler, service, and repository files for a specific app module.
-
-- Create the app handler, service, and repository files inside the `internal/<app_name>/` folder.
-- If you also want to generate data storage implementation (MySQL, PostgreSQL, etc.) for the repository, you can pass a database flag and choose your database.
-
-```bash
-bccli app todo
-```
-
-This will generate
-```bash
+This command generates todo domain representation and with its three-layered app in the following structure:
+```text
 internal/
 ├── domain/
-├── infra/
+│   └── todo.go
 └── todo/
     ├── interface/
     │   └── rest/
     │       └── todo.go
     ├── repository/
-    └── service/
+    └── usecase/
         └── todo.go
-```
-### Create a domain entity
-
-Creates a domain entity file containing the struct for a given domain name.
-- Creates a new file in the internal/domain/ folder for the given domain.
-
-```bash
-bccli domain todo
-```
-This will generate:
-```bash
-internal/
-├── domain/
-│   └── todo.go
-└── infra/
 ```
 
 ### Set up Infrastucture
-Sets up the infrastructure for your project.
-- --db: Initializes a database setup file inside the internal/infra/ folder.
-
+The ``infra generate`` command is used to generate 3rd party service libraries config or other external component of the app.
 ```bash
-bccli infra --db=mysql
+bccli infra generate postgresql
 ```
-This will generate:
-```bash
+This command generates a basic MySQL configuration file:
+```text
 internal/
-├── domain/
 └── infra/
-    └── mysql.go
+    └── postgresql.go
 ```
+You can choose another database like mysql or mariadb.
 
 ## License
 This repository is licensed under the [MIT License](LICENSE).
