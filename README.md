@@ -1,11 +1,8 @@
 # bccli
-
 bccli is a simple cli tool for setting up go server project based on Three-layered Archictecture combined with Domain Driven Design.
 
 ## Installation
-
 Make sure you have [Go](https://go.dev/doc/install) installed on your device.
-
 ```bash
 go install github.com/bccfilkom-be/bccli
 ```
@@ -30,13 +27,11 @@ Flags:
 
 ### Initialize a new project
 The ``init`` command sets up the initial project structure.
-
 ```bash
 mkdir go-server
 cd go-server
 bccli init github.com/bccfilkom-be/go-server
 ```
-
 This will bootstrap the current directory with the following structure:
 ```text
 cmd/
