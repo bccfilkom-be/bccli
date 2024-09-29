@@ -50,7 +50,6 @@ Makefile
 
 ### Create a domain entity
 The ``domain generate`` command used to create a new domain entity with its layer.
-
 ```bash
 bccli domain generate todo
 ```
@@ -69,17 +68,17 @@ internal/
 ```
 
 ### Set up Infrastucture
-The ``infra generate`` command is used to generate 3rd party service libraries config or other external component of the app
-
+The ``infra generate`` command is used to generate 3rd party service libraries config or other external component of the app.
 ```bash
-bccli infra generate mysql
+bccli infra generate postgresql
 ```
 This command generates a basic MySQL configuration file:
-```bash
+```text
 internal/
 └── infra/
-    └── mysql.go
+    └── postgresql.go
 ```
-You can choose another database like postgres or mariadb to scaffold the corresponding setup.
+You can choose another database like mysql or mariadb.
+
 ## License
 This repository is licensed under the [MIT License](LICENSE).
