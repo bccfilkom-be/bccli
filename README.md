@@ -39,35 +39,33 @@ bccli init github.com/bccfilkom-be/go-server
 
 This will bootstrap the current directory with the following structure:
 ```text
-go-server
-├── cmd
-│   └── api
-│       └── main.go
-├── Dockerfile
-├── go.mod
-├── go.sum
-└── Makefile
+cmd/
+└── api/
+    └── main.go
+Dockerfile
+go.mod
+go.sum
+Makefile
 ```
 
 ### Create a domain entity
-The ``domain generate`` command used to create a new domain entity.
+The ``domain generate`` command used to create a new domain entity with its layer.
 
 ```bash
 bccli domain generate todo
 ```
-This command generates a domain for todo and creates related files in the following structure:
-```bash
+This command generates todo domain representation and with its three-layered app in the following structure:
+```text
 internal/
 ├── domain/
 │   └── todo.go
-├── todo/
-│   ├── interface/
-│   │   └── rest/
-│   │       └── todo.go
-│   ├── repository/
-│   └── service/
-│       └── todo.go
-└── infra/
+└── todo/
+    ├── interface/
+    │   └── rest/
+    │       └── todo.go
+    ├── repository/
+    └── usecase/
+        └── todo.go
 ```
 
 ### Set up Infrastucture
@@ -79,7 +77,6 @@ bccli infra generate mysql
 This command generates a basic MySQL configuration file:
 ```bash
 internal/
-├── domain/
 └── infra/
     └── mysql.go
 ```
