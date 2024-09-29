@@ -32,18 +32,17 @@ Flags:
 The ``init`` command sets up the initial project structure.
 
 ```bash
-bccli init todo
+mkdir go-server
+cd go-server
+bccli init github.com/bccfilkom-be/go-server
 ```
 
-This will create the project structure inside **todo** folder with the following structure:
-```bash
-todo/
-├── cmd/
-│   └── api/
+This will bootstrap the current directory with the following structure:
+```text
+go-server
+├── cmd
+│   └── api
 │       └── main.go
-├── internal/
-│   ├── domain/
-│   └── infra/
 ├── Dockerfile
 ├── go.mod
 ├── go.sum
