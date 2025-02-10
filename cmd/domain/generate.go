@@ -14,7 +14,6 @@ import (
 
 type Data struct {
 	Domain       string
-	DomainStruct string
 	DBDriver     string
 	Database     string
 	Module       string
@@ -181,7 +180,6 @@ func createAndWriteFile(filePath, componentName, domainName string) error {
 
 	data := Data{
 		Domain:       str.PascalCase().Get(),
-		DomainStruct: str.PascalCase().Get(),
 		Database:     dbMap.name,
 	}
 
