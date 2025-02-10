@@ -6,10 +6,10 @@ import(
 
 type {{ .Domain }}{{ .Database }}Itf interface {}
 
-type {{ .DomainStruct }}{{ .Database }} struct {
+type {{ .Domain }}{{ .Database }} struct {
     db *{{ .DBDriver }}
 }
 
 func New{{ .Domain }}{{ .Database }}(db *{{ .DBDriver }}) {{ .Domain }}{{ .Database }}Itf {
-    return &{{ .DomainStruct }}{{ .Database }}{db}
+    return &{{ .Domain }}{{ .Database }}{db}
 }
