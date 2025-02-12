@@ -13,10 +13,10 @@ import (
 )
 
 type Data struct {
-	Domain       string
-	DBDriver     string
-	Database     string
-	Module       string
+	Domain   string
+	DBDriver string
+	Database string
+	Module   string
 }
 
 type appOptions struct {
@@ -148,25 +148,24 @@ func generateComponent(domainName, componentName, database string) error {
 	}
 
 	dirPath := path.Join("internal/", domainName, pathMap[componentName])
-	if componentName == "repository" && database == "" {
-		err := os.MkdirAll(dirPath, os.ModePerm)
-		return err
-	}
 
-	if componentName == "repository" && database != "" {
-		_, err := os.Stat(fmt.Sprintf("internal/infra/%s.go", database))
-		if os.IsExist(err) {
-			return errors.New("file already exist")
+	if componentName == "repository" {
+		if database == "" {
+			err := os.MkdirAll(dirPath, os.ModePerm)
+			if err != nil {
+				return errors.New(err.Error())
+			}
+
+			return err
 		}
 
-		if err == nil {
-			filePath := path.Join(dirPath, fmt.Sprintf("%s.go", database))
-			componentName = "repoWithDb"
+		infraPath := path.Join("internal/infra", database+".go")
 
-			return createAndWriteFile(filePath, componentName, domainName)
+		_, err := os.Stat(infraPath)
+
+		if errors.Is(err, os.ErrNotExist) {
+			return errors.New("no database found in your project")
 		}
-
-		return errors.New("database not found")
 	}
 
 	filePath := path.Join(dirPath, fmt.Sprintf("%s.go", domainName))
@@ -179,21 +178,19 @@ func createAndWriteFile(filePath, componentName, domainName string) error {
 	dbMap := dbMap[database]
 
 	data := Data{
-		Domain:       str.PascalCase().Get(),
-		Database:     dbMap.name,
+		Domain:   str.PascalCase().Get(),
+		Database: dbMap.name,
 	}
 
-	if componentName == "repoWithDb" {
-		data.Module = dbMap.module
+	data.Module = dbMap.module
 
-		switch database {
-		case "mysql", "mariadb":
-			data.DBDriver = "sqlx.DB"
-		case "postgresql":
-			data.DBDriver = "pgx.Conn"
-		default:
-			return fmt.Errorf("database %s not found", database)
-		}
+	switch database {
+	case "mysql", "mariadb":
+		data.DBDriver = "sqlx.DB"
+	case "postgresql":
+		data.DBDriver = "pgx.Conn"
+	default:
+		return fmt.Errorf("database %s not found", database)
 	}
 
 	file, err := file.Create(filePath)
