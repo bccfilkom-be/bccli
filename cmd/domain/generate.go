@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/bccfilkom-be/bccli/internal/file"
 	"github.com/bccfilkom-be/bccli/internal/template"
@@ -44,6 +45,18 @@ var (
 			name:   "PostgreSQL",
 			module: `"github.com/jackc/pgx/v5"`,
 		},
+		"gorm-mysql": {
+			name: "MySQL",
+			module: `"gorm.io/gorm"`,
+		},
+		"gorm-pg": {
+			name: "PostgreSQL",
+			module: `"gorm.io/gorm"`,
+		},
+	}
+	ormDatabases = map[string]bool{
+		"gorm-mysql": true,
+		"gorm-pg":    true,
 	}
 )
 
@@ -153,18 +166,35 @@ func generateComponent(domainName, componentName, database string) error {
 		if database == "" {
 			err := os.MkdirAll(dirPath, os.ModePerm)
 			if err != nil {
-				return errors.New(err.Error())
+				return errors.New(fmt.Sprintf("error creating directory: %v", err))
 			}
 
 			return err
 		}
 
-		infraPath := path.Join("internal/infra", database+".go")
+		infraName := getInfraName(database)
 
-		_, err := os.Stat(infraPath)
+		infraPath := path.Join("internal/infra", infraName+".go")
 
-		if errors.Is(err, os.ErrNotExist) {
-			return errors.New("no database found in your project")
+		b, err := os.ReadFile(infraPath)
+		if err != nil {
+			if errors.Is(err, os.ErrNotExist) {
+				return errors.New("no database found in your project")
+			}
+
+			return errors.New(fmt.Sprintf("error reading file: %v", err))
+		}
+
+		s := string(b)
+
+		isORM := strings.Contains(s, "gorm.io")
+
+		if isORM && !ormDatabases[database] {
+			return errors.New("use gorm database instead")
+		}
+
+		if !isORM && ormDatabases[database] {
+			return errors.New("use raw database instead")
 		}
 	}
 
@@ -189,8 +219,10 @@ func createAndWriteFile(filePath, componentName, domainName string) error {
 		data.DBDriver = "sqlx.DB"
 	case "postgresql":
 		data.DBDriver = "pgx.Conn"
-	default:
-		return fmt.Errorf("database %s not found", database)
+	case "gorm-mysql", "gorm-pg":
+		data.DBDriver = "gorm.DB"
+	// default:
+	// 	return fmt.Errorf("database %s not found", database)
 	}
 
 	file, err := file.Create(filePath)
@@ -204,4 +236,17 @@ func createAndWriteFile(filePath, componentName, domainName string) error {
 	}
 
 	return nil
+}
+
+func getInfraName(database string) string {
+	if _, ok := ormDatabases[database]; ok {
+		switch database {
+		case "gorm-mysql":
+			return "mysql"
+		case "gorm-pg":
+			return "postgresql"
+		}
+	}
+
+	return database
 }
