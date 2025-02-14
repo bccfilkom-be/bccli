@@ -109,21 +109,27 @@ By default it generate all component at once, but you can choose one or multiple
 			return err
 		}
 
-		file, err := file.Create("internal/domain/" + domainName + ".go")
-		if err != nil {
-			return err
-		}
-
 		data := Data{
 			Domain: str.PascalCase().Get(),
 		}
 
-		err = template.Execute(file, "domain", data)
+		domainFile, err := file.Create("internal/domain/entity/" + domainName + ".go")
 		if err != nil {
 			return err
 		}
 
-		if err := os.MkdirAll("internal/"+domainName, os.ModePerm); err != nil {
+		err = template.Execute(domainFile, "domain", data)
+		if err != nil {
+			return err
+		}
+
+		dtoFile, err := file.Create("internal/domain/dto/" + domainName + ".go")
+		if err != nil {
+			return err
+		}
+
+		err = template.Execute(dtoFile, "dto", data)
+		if err != nil {
 			return err
 		}
 
@@ -160,7 +166,7 @@ func generateComponent(domainName, componentName, database string) error {
 		"usecase":    "usecase",
 	}
 
-	dirPath := path.Join("internal/", domainName, pathMap[componentName])
+	dirPath := path.Join("internal/app/", domainName, pathMap[componentName])
 
 	if componentName == "repository" {
 		if database == "" {
