@@ -227,8 +227,6 @@ func createAndWriteFile(filePath, componentName, domainName string) error {
 		data.DBDriver = "pgx.Conn"
 	case "gorm-mysql", "gorm-pg":
 		data.DBDriver = "gorm.DB"
-	// default:
-	// 	return fmt.Errorf("database %s not found", database)
 	}
 
 	file, err := file.Create(filePath)
