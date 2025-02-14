@@ -172,7 +172,7 @@ func generateComponent(domainName, componentName, database string) error {
 		if database == "" {
 			err := os.MkdirAll(dirPath, os.ModePerm)
 			if err != nil {
-				return errors.New(fmt.Sprintf("error creating directory: %v", err))
+				return err
 			}
 
 			return err
@@ -188,7 +188,7 @@ func generateComponent(domainName, componentName, database string) error {
 				return errors.New("no database found in your project")
 			}
 
-			return errors.New(fmt.Sprintf("error reading file: %v", err))
+			return err
 		}
 
 		s := string(b)
