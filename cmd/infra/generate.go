@@ -53,7 +53,7 @@ func gen(cmd *cobra.Command, args []string) error {
 	if err := gocmd.Get(pkg...); err != nil {
 		return err
 	}
-	file, err := file.Create(fmt.Sprintf("internal/infra/%s.go", fileName))
+	file, err := file.Create(fmt.Sprintf("internal/infra/%s/%s.go", fileName, fileName))
 	if err != nil {
 		return err
 	}
