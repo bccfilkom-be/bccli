@@ -5,6 +5,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-func NewMariaDB(config mysql.Config) (*sqlx.DB, error) {
+func New(config mysql.Config) (*sqlx.DB, error) {
 	return sqlx.Open("mysql", config.FormatDSN())
 }
