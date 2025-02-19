@@ -65,6 +65,19 @@ func _init(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	ignorefile, err := file.Create(".gitignore")
+	if err != nil {
+		return err
+	}
+	if err := template.Execute(ignorefile, "gitignore", nil); err != nil {
+		return err
+	}
+
+	_, err = file.Create(".env")
+	if err != nil {
+		return err
+	}
+
 	if err := gocmd.Tidy(); err != nil {
 		return err
 	}
