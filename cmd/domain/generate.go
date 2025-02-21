@@ -180,7 +180,7 @@ func generateComponent(domainName, componentName, database string) error {
 
 		infraName := getInfraName(database)
 
-		infraPath := path.Join("internal/infra/", infraName, "/", infraName+".go")
+		infraPath := path.Join("internal/infra/", infraName, "/" , infraName+".go")
 
 		b, err := os.ReadFile(infraPath)
 		if err != nil {
