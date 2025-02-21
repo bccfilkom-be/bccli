@@ -27,19 +27,33 @@ var (
 		"mysql":      {"github.com/go-sql-driver/mysql", "github.com/jmoiron/sqlx"},
 		"mariadb":    {"github.com/go-sql-driver/mysql", "github.com/jmoiron/sqlx"},
 		"postgresql": {"github.com/jackc/pgx/v5"},
+		"gorm-mysql": {"gorm.io/driver/mysql", "gorm.io/gorm"},
+		"gorm-pg":    {"gorm.io/driver/postgres", "gorm.io/gorm"},
+	}
+
+	fileNames = map[string]string{
+		"gorm-mysql": "mysql",
+		"gorm-pg":    "postgresql",
 	}
 )
 
 func gen(cmd *cobra.Command, args []string) error {
 	service := strings.ToLower(args[0])
+
 	pkg, ok := services[service]
 	if !ok {
 		return ErrNotExist
 	}
+
+	fileName, ok := fileNames[service]
+	if !ok {
+		fileName = service
+	}
+
 	if err := gocmd.Get(pkg...); err != nil {
 		return err
 	}
-	file, err := file.Create(fmt.Sprintf("internal/infra/%s.go", service))
+	file, err := file.Create(fmt.Sprintf("internal/infra/%s/%s.go", fileName, fileName))
 	if err != nil {
 		return err
 	}

@@ -1,4 +1,4 @@
-package tmpl
+package infra
 
 import (
 	"context"
@@ -6,6 +6,6 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func NewPostgreSQL(ctx context.Context, config *pgx.ConnConfig) (*pgx.Conn, error) {
+func New(ctx context.Context, config *pgx.ConnConfig) (*pgx.Conn, error) {
 	return pgx.ConnectConfig(ctx, config)
 }

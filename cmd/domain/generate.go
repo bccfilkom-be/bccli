@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/bccfilkom-be/bccli/internal/file"
 	"github.com/bccfilkom-be/bccli/internal/template"
@@ -13,11 +14,10 @@ import (
 )
 
 type Data struct {
-	Domain       string
-	DomainStruct string
-	DBDriver     string
-	Database     string
-	Module       string
+	Domain   string
+	DBDriver string
+	Database string
+	Module   string
 }
 
 type appOptions struct {
@@ -45,6 +45,18 @@ var (
 			name:   "PostgreSQL",
 			module: `"github.com/jackc/pgx/v5"`,
 		},
+		"gorm-mysql": {
+			name: "MySQL",
+			module: `"gorm.io/gorm"`,
+		},
+		"gorm-pg": {
+			name: "PostgreSQL",
+			module: `"gorm.io/gorm"`,
+		},
+	}
+	ormDatabases = map[string]bool{
+		"gorm-mysql": true,
+		"gorm-pg":    true,
 	}
 )
 
@@ -97,21 +109,27 @@ By default it generate all component at once, but you can choose one or multiple
 			return err
 		}
 
-		file, err := file.Create("internal/domain/" + domainName + ".go")
-		if err != nil {
-			return err
-		}
-
 		data := Data{
-			Domain: str.CamelCase().Get(),
+			Domain: str.PascalCase().Get(),
 		}
 
-		err = template.Execute(file, "domain", data)
+		domainFile, err := file.Create("internal/domain/entity/" + domainName + ".go")
 		if err != nil {
 			return err
 		}
 
-		if err := os.MkdirAll("internal/"+domainName, os.ModePerm); err != nil {
+		err = template.Execute(domainFile, "domain", data)
+		if err != nil {
+			return err
+		}
+
+		dtoFile, err := file.Create("internal/domain/dto/" + domainName + ".go")
+		if err != nil {
+			return err
+		}
+
+		err = template.Execute(dtoFile, "dto", data)
+		if err != nil {
 			return err
 		}
 
@@ -148,26 +166,42 @@ func generateComponent(domainName, componentName, database string) error {
 		"usecase":    "usecase",
 	}
 
-	dirPath := path.Join("internal/", domainName, pathMap[componentName])
-	if componentName == "repository" && database == "" {
-		err := os.MkdirAll(dirPath, os.ModePerm)
-		return err
-	}
+	dirPath := path.Join("internal/app/", domainName, pathMap[componentName])
 
-	if componentName == "repository" && database != "" {
-		_, err := os.Stat(fmt.Sprintf("internal/infra/%s.go", database))
-		if os.IsExist(err) {
-			return errors.New("file already exist")
+	if componentName == "repository" {
+		if database == "" {
+			err := os.MkdirAll(dirPath, os.ModePerm)
+			if err != nil {
+				return err
+			}
+
+			return err
 		}
 
-		if err == nil {
-			filePath := path.Join(dirPath, fmt.Sprintf("%s.go", database))
-			componentName = "repoWithDb"
+		infraName := getInfraName(database)
 
-			return createAndWriteFile(filePath, componentName, domainName)
+		infraPath := path.Join("internal/infra", infraName+".go")
+
+		b, err := os.ReadFile(infraPath)
+		if err != nil {
+			if errors.Is(err, os.ErrNotExist) {
+				return errors.New("no database found in your project")
+			}
+
+			return err
 		}
 
-		return errors.New("database not found")
+		s := string(b)
+
+		isORM := strings.Contains(s, "gorm.io")
+
+		if isORM && !ormDatabases[database] {
+			return errors.New("use gorm database instead")
+		}
+
+		if !isORM && ormDatabases[database] {
+			return errors.New("use raw database instead")
+		}
 	}
 
 	filePath := path.Join(dirPath, fmt.Sprintf("%s.go", domainName))
@@ -180,22 +214,19 @@ func createAndWriteFile(filePath, componentName, domainName string) error {
 	dbMap := dbMap[database]
 
 	data := Data{
-		Domain:       str.CamelCase().Get(),
-		DomainStruct: str.SnakeCase().ToLower(),
-		Database:     dbMap.name,
+		Domain:   str.PascalCase().Get(),
+		Database: dbMap.name,
 	}
 
-	if componentName == "repoWithDb" {
-		data.Module = dbMap.module
+	data.Module = dbMap.module
 
-		switch database {
-		case "mysql", "mariadb":
-			data.DBDriver = "sqlx.DB"
-		case "postgresql":
-			data.DBDriver = "pgx.Conn"
-		default:
-			return fmt.Errorf("database %s not found", database)
-		}
+	switch database {
+	case "mysql", "mariadb":
+		data.DBDriver = "sqlx.DB"
+	case "postgresql":
+		data.DBDriver = "pgx.Conn"
+	case "gorm-mysql", "gorm-pg":
+		data.DBDriver = "gorm.DB"
 	}
 
 	file, err := file.Create(filePath)
@@ -209,4 +240,17 @@ func createAndWriteFile(filePath, componentName, domainName string) error {
 	}
 
 	return nil
+}
+
+func getInfraName(database string) string {
+	if _, ok := ormDatabases[database]; ok {
+		switch database {
+		case "gorm-mysql":
+			return "mysql"
+		case "gorm-pg":
+			return "postgresql"
+		}
+	}
+
+	return database
 }
