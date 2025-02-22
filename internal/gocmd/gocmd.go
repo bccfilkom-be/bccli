@@ -5,7 +5,7 @@ import "os/exec"
 // Init go module
 func Get(pkgs ...string) error {
 	for _, pkg := range pkgs {
-		err := execute("get", "-u", pkg)
+		err := execute("get", pkg)
 		if err != nil {
 			return err
 		}
