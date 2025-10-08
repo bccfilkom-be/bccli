@@ -15,19 +15,19 @@ import (
 const idleTimeout = 5 * time.Second
 
 func main() {
-	app := fiber.New(fiber.Config{
+	r := fiber.New(fiber.Config{
 		IdleTimeout: idleTimeout,
 	})
 
-	app.Use(middleware.Authentication)
+	r.Use(middleware.Authentication)
 
-	app.Get("/", func(c *fiber.Ctx) error {
+	r.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello world!")
 	})
 
 	// Listen from a different goroutine
 	go func() {
-		if err := app.Listen(":8080"); err != nil {
+		if err := r.Listen(":8080"); err != nil {
 			log.Panic(err)
 		}
 	}()
@@ -37,7 +37,7 @@ func main() {
 
 	_ = <-c // This blocks the main thread until an interrupt is received
 	fmt.Println("Gracefully shutting down...")
-	_ = app.Shutdown()
+	_ = r.Shutdown()
 
 	fmt.Println("Running cleanup tasks...")
 
