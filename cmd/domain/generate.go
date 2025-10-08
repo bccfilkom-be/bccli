@@ -46,11 +46,11 @@ var (
 			module: `"github.com/jackc/pgx/v5"`,
 		},
 		"gorm-mysql": {
-			name: "MySQL",
+			name:   "MySQL",
 			module: `"gorm.io/gorm"`,
 		},
 		"gorm-pg": {
-			name: "PostgreSQL",
+			name:   "PostgreSQL",
 			module: `"gorm.io/gorm"`,
 		},
 	}
@@ -180,7 +180,7 @@ func generateComponent(domainName, componentName, database string) error {
 
 		infraName := getInfraName(database)
 
-		infraPath := path.Join("internal/infra", infraName+".go")
+		infraPath := path.Join("internal/infra/", infraName, "/", infraName+".go")
 
 		b, err := os.ReadFile(infraPath)
 		if err != nil {
@@ -234,7 +234,12 @@ func createAndWriteFile(filePath, componentName, domainName string) error {
 		return err
 	}
 
-	err = template.Execute(file, componentName, data)
+	tmplName := componentName
+	if componentName == "repository" && ormDatabases[database] {
+		tmplName = strings.ReplaceAll(database, "-", "_")
+	}
+
+	err = template.Execute(file, tmplName, data)
 	if err != nil {
 		return err
 	}

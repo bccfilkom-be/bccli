@@ -67,7 +67,7 @@ func NewFramework(f string) (Framework, error) {
 	}
 }
 
-func Main(f Framework) error {
+func Main(f Framework, name string) error {
 	_file, err := file.Create("cmd/api/main.go")
 	if err != nil {
 		return err
@@ -75,7 +75,12 @@ func Main(f Framework) error {
 	if err := gocmd.Get(f.Package()); err != nil {
 		return err
 	}
-	if err := template.Execute(_file, fmt.Sprintf("%s_main", f), nil); err != nil {
+
+	data := map[string]string{
+		"Name": name,
+	}
+
+	if err := template.Execute(_file, fmt.Sprintf("%s_main", f), data); err != nil {
 		return err
 	}
 	return nil
