@@ -64,11 +64,11 @@ func _init(cmd *cobra.Command, args []string) error {
 
 	switch _framework.String() {
 	case "gin":
-		err = template.Execute(middlewareFile, "ChiMiddleware", data)
+		err = template.Execute(middlewareFile, "gin_middleware", data)
 	case "fiber":
-		err = template.Execute(middlewareFile, "ChiMiddleware", data)
+		err = template.Execute(middlewareFile, "fiber_middleware", data)
 	case "chi":
-		err = template.Execute(middlewareFile, "ChiMiddleware", data)
+		err = template.Execute(middlewareFile, "chi_middleware", data)
 	}
 
 	if err != nil {

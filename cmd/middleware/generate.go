@@ -64,11 +64,11 @@ func gen(cmd *cobra.Command, args []string) error {
 
 	switch fw {
 	case FrameworkChi:
-		err = template.Execute(middlewareFile, "ChiMiddleware", data)
+		err = template.Execute(middlewareFile, "chi_middleware", data)
 	case FrameworkGin:
-		err = template.Execute(middlewareFile, "GinMiddleware", data)
+		err = template.Execute(middlewareFile, "gin_middleware", data)
 	case FrameworkFiber:
-		err = template.Execute(middlewareFile, "FiberMiddleware", data)
+		err = template.Execute(middlewareFile, "fiber_middleware", data)
 	}
 
 	if err != nil {
