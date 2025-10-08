@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"os"
 	"runtime"
 
 	"github.com/bccfilkom-be/bccli/internal/file"
@@ -29,6 +30,14 @@ var initCmd = &cobra.Command{
 
 func _init(cmd *cobra.Command, args []string) error {
 	name := args[0]
+
+	if err := os.MkdirAll(name, 0o755); err != nil {
+		return err
+	}
+	if err := os.Chdir(name); err != nil {
+		return err
+	}
+
 	_framework, err := framework.NewFramework(Framework)
 	if err != nil {
 		return err
@@ -40,11 +49,11 @@ func _init(cmd *cobra.Command, args []string) error {
 	if err := gocmd.Init(name); err != nil {
 		return err
 	}
-	if err := framework.Main(_framework); err != nil {
+	if err := framework.Main(_framework, name); err != nil {
 		return err
 	}
 
-	middlewareFile, err := file.Create("internal/middleware/authorization.go")
+	middlewareFile, err := file.Create("internal/middleware/authentication.go")
 	if err != nil {
 		return err
 	}

@@ -8,6 +8,8 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"{{ .Name }}/internal/middleware"
 )
 
 const idleTimeout = 5 * time.Second
@@ -16,6 +18,8 @@ func main() {
 	app := fiber.New(fiber.Config{
 		IdleTimeout: idleTimeout,
 	})
+
+	app.Use(middleware.Authentication)
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello world!")
