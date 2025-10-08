@@ -43,6 +43,29 @@ func _init(cmd *cobra.Command, args []string) error {
 	if err := framework.Main(_framework); err != nil {
 		return err
 	}
+
+	middlewareFile, err := file.Create("internal/middleware/authorization.go")
+	if err != nil {
+		return err
+	}
+
+	data := map[string]string{
+		"Middleware": "Authentication",
+	}
+
+	switch _framework.String() {
+	case "gin":
+		err = template.Execute(middlewareFile, "ChiMiddleware", data)
+	case "fiber":
+		err = template.Execute(middlewareFile, "ChiMiddleware", data)
+	case "chi":
+		err = template.Execute(middlewareFile, "ChiMiddleware", data)
+	}
+
+	if err != nil {
+		return err
+	}
+
 	dockerfile, err := file.Create("Dockerfile")
 	if err != nil {
 		return err

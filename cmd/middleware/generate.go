@@ -48,17 +48,17 @@ func gen(cmd *cobra.Command, args []string) error {
 	str := stringy.New(args[0])
 	middlewareName := str.SnakeCase().ToLower()
 
-	middlewareFile, err := file.Create("internal/middleware/" + middlewareName + ".go")
-	if err != nil {
-		return err
-	}
-
 	fw, err := detectFramework(".")
 	if err != nil {
 		return err
 	}
 
-	data := Data {
+	middlewareFile, err := file.Create("internal/middleware/" + middlewareName + ".go")
+	if err != nil {
+		return err
+	}
+
+	data := Data{
 		Middleware: middlewareName,
 	}
 
