@@ -59,7 +59,7 @@ func gen(cmd *cobra.Command, args []string) error {
 	}
 
 	data := Data{
-		Middleware: middlewareName,
+		Middleware: str.PascalCase().Get(),
 	}
 
 	switch fw {
