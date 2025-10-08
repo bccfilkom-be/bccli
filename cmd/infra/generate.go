@@ -57,7 +57,13 @@ func gen(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	if err := template.Execute(file, service, nil); err != nil {
+
+	tmplName := service
+	if strings.Contains(service, "-") {
+		tmplName = strings.ReplaceAll(service, "-", "_")
+	}
+
+	if err := template.Execute(file, tmplName, nil); err != nil {
 		return err
 	}
 
