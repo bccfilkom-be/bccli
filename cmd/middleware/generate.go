@@ -1,14 +1,13 @@
 package middleware
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 
 	"github.com/bccfilkom-be/bccli/internal/file"
+	"github.com/bccfilkom-be/bccli/internal/framework"
 	"github.com/bccfilkom-be/bccli/internal/template"
 	"github.com/gobeam/stringy"
 	"github.com/spf13/cobra"
@@ -18,18 +17,10 @@ type Data struct {
 	Middleware string
 }
 
-type Framework string
-
-const (
-	FrameworkGin   Framework = "gin"
-	FrameworkFiber Framework = "fiber"
-	FrameworkChi   Framework = "chi"
-)
-
-var moduleByFramework = map[Framework][]string{
-	FrameworkGin:   {"github.com/gin-gonic/gin"},
-	FrameworkFiber: {"github.com/gofiber/fiber/v2"},
-	FrameworkChi:   {"github.com/go-chi/chi/v5"},
+var moduleByFramework = map[framework.Framework][]string{
+	framework.GIN:   {"github.com/gin-gonic/gin"},
+	framework.FIBER: {"github.com/gofiber/fiber/v2"},
+	framework.CHI:   {"github.com/go-chi/chi/v5"},
 }
 
 func init() {
@@ -63,11 +54,11 @@ func gen(cmd *cobra.Command, args []string) error {
 	}
 
 	switch fw {
-	case FrameworkChi:
+	case framework.CHI:
 		err = template.Execute(middlewareFile, "chi_middleware", data)
-	case FrameworkGin:
+	case framework.GIN:
 		err = template.Execute(middlewareFile, "gin_middleware", data)
-	case FrameworkFiber:
+	case framework.FIBER:
 		err = template.Execute(middlewareFile, "fiber_middleware", data)
 	}
 
@@ -80,38 +71,21 @@ func gen(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func detectFramework(projectDir string) (Framework, error) {
+func detectFramework(projectDir string) (framework.Framework, error) {
 	goModPath := filepath.Join(projectDir, "go.mod")
 	b, err := os.ReadFile(goModPath)
 	if err != nil {
-		return "", fmt.Errorf("read go.mod: %w", err)
+		return -1, err
 	}
 	text := string(b)
 
-	seen := map[Framework]struct{}{}
 	for fw, mods := range moduleByFramework {
 		for _, m := range mods {
 			if strings.Contains(text, m) {
-				seen[fw] = struct{}{}
-				break
+				return fw, nil
 			}
 		}
 	}
 
-	switch len(seen) {
-	case 0:
-		return "", errors.New("no supported framework modules found in go.mod")
-	case 1:
-		for fw := range seen {
-			return fw, nil
-		}
-	default:
-		var names []string
-		for fw := range seen {
-			names = append(names, string(fw))
-		}
-		sort.Strings(names)
-		return "", fmt.Errorf("multiple frameworks detected in go.mod: %s. use --framework to override", strings.Join(names, ", "))
-	}
-	return "", errors.New("unreachable")
+	return -1, ErrFWNotFound
 }
