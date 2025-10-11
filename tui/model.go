@@ -15,7 +15,7 @@ const (
 
 type model struct {
 	step              step
-	packageName       textinput.Model
+	projectName       textinput.Model
 	cursor            int
 	frameworkChoices  []string
 	selectedFramework int
@@ -25,14 +25,14 @@ type model struct {
 
 func initialModel() model {
 	ti := textinput.New()
-	ti.Placeholder = "github.com/<username>/<repository>"
+	ti.Placeholder = "project name"
 	ti.Focus()
 	ti.CharLimit = 156
 	ti.Width = 60
 
 	return model{
 		step:             stepPackage,
-		packageName:      ti,
+		projectName:      ti,
 		frameworkChoices: frameWorkChoises,
 		driverChoices:    databaseDriverChoises,
 	}

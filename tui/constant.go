@@ -4,12 +4,10 @@ const (
 	FIBER string = "fiber"
 	GIN   string = "gin"
 	CHI   string = "chi"
-	NET   string = "net"
-	MUX   string = "mux"
 )
 
 var (
-	frameWorkChoises = []string{FIBER, GIN, CHI, NET, MUX}
+	frameWorkChoises = []string{FIBER, GIN, CHI}
 )
 
 const (
