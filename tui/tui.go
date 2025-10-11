@@ -38,12 +38,12 @@ func Run() error {
 		return fmt.Errorf("infra generation failed: %w", err)
 	}
 
-	fmt.Println("✅ All done! Project and infrastructure successfully initialized.")
+	fmt.Println("All done! Project and infrastructure successfully initialized.")
 	return nil
 }
 
 func runStep(title string, name string, args ...string) error {
-	fmt.Printf("🔧 %s...\n", title)
+	fmt.Printf("%s...\n", title)
 	cmd := exec.Command(name, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
