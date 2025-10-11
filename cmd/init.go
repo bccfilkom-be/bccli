@@ -10,25 +10,47 @@ import (
 	"github.com/bccfilkom-be/bccli/internal/framework"
 	"github.com/bccfilkom-be/bccli/internal/gocmd"
 	"github.com/bccfilkom-be/bccli/internal/template"
+	"github.com/bccfilkom-be/bccli/tui"
 	"github.com/spf13/cobra"
 )
 
-var Framework string
+var (
+	Framework   string
+	Interactive bool
+)
 
 func init() {
 	initCmd.Flags().StringVar(&Framework, "framework", "chi", "web framework of choice, [chi]")
+	initCmd.Flags().BoolVarP(&Interactive, "interactive", "i", false, "run in interactive mode")
 	RootCmd.AddCommand(initCmd)
 }
 
 var initCmd = &cobra.Command{
-	Use:   "init <project-name>",
-	Short: "Initialize a new Go REST server project structure.",
-	Long:  "Bootstraps a new Go REST server project by generating the required files\nand directories for running a simple server.",
-	Args:  cobra.ExactArgs(1),
-	RunE:  _init,
+	Use:   "init [name]",
+	Short: "Initialize a new Go REST project.",
+	Long:  "Bootstraps a new Go REST server project by generating the required files and directories.",
+	Args: func(cmd *cobra.Command, args []string) error {
+		if Interactive {
+			return nil
+		}
+		if len(args) != 1 {
+			return fmt.Errorf("requires 1 argument: project name")
+		}
+		return nil
+	},
+	RunE: func(cmd *cobra.Command, args []string) error {
+		if Interactive {
+			return _initTUI(cmd, args)
+		}
+		return _init(cmd, args)
+	},
 }
 
-func _init(cmd *cobra.Command, args []string) error {
+func _initTUI(_ *cobra.Command, _ []string) error {
+	return tui.Run()
+}
+
+func _init(_ *cobra.Command, args []string) error {
 	name := args[0]
 
 	if err := os.MkdirAll(name, 0o755); err != nil {
