@@ -18,6 +18,7 @@ Available Commands:
   help        Help about any command
   infra       Infra layer command
   init        Initialize a new Go REST server project structure.
+  middleware  Middleware layer command
 
 Flags:
   -h, --help   help for bccli
@@ -25,18 +26,26 @@ Flags:
 
 ## Command Overview
 
-### Initialize a new project
+### Initialize a new project 
 The ``init`` command sets up the initial project structure.
 ```bash
-mkdir go-server
-cd go-server
-bccli init github.com/bccfilkom-be/go-server
+bccli init -i
 ```
+After that, this command will ask you for:
+- Project Name
+- HTTP Framework
+- Database Driver
+
 This will bootstrap the current directory with the following structure:
 ```text
 cmd/
 └── api/
     └── main.go
+internal/
+├── middleware/
+│   └── authentication.go
+└── infra/
+    └── (database driver).go
 Dockerfile
 go.mod
 go.sum
@@ -74,6 +83,18 @@ internal/
     └── postgresql.go
 ```
 You can choose another database like mysql or mariadb.
+
+### Set up Middleware
+The ``middleware generate`` command is used to generate middleware inside internal folder
+```bash
+bccli middleware generate todo
+```
+This command generates a basic MySQL configuration file:
+```text
+internal/
+└── middleware/
+    └── todo.go
+```
 
 ## License
 This repository is licensed under the [MIT License](LICENSE).
