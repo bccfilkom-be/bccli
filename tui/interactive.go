@@ -34,11 +34,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.step = stepFinish
 				m.cursor = 0
 			case stepFinish:
-				if m.cursor == 0 {
-					return m, tea.Quit
-				} else {
-					return m, tea.Quit
-				}
+				return m, tea.Quit
 			}
 		case tea.KeyUp:
 			if m.cursor > 0 {
